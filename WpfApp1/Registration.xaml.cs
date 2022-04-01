@@ -11,6 +11,7 @@ namespace WpfApp1
     /// </summary>
     public partial class Registration : Page
     {
+        private string request;
         public Registration()
         {
             InitializeComponent();
@@ -33,7 +34,9 @@ namespace WpfApp1
             foreach (char c in specialCharactersArray)
             {
                 if (password.Contains(c))
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -53,9 +56,9 @@ namespace WpfApp1
                 {
                     // проверка логина в бд
                     MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
-                    string req = $@"select [login] from [system]
+                    request = $@"select [login] from [system]
                                 where [login] = @Login;";
-                    DataTable tableWithData = MySingleton.Instance.SqlServer.Select(req);
+                    DataTable tableWithData = MySingleton.Instance.SqlServer.Select(request);
                     if (tableWithData.Rows.Count > 0)
                     {
                         MessageBox.Show("Логин уже занят.", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -69,11 +72,10 @@ namespace WpfApp1
                         MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Passport_id", SqlDbType.Int).Value = passport_id.Text;
                         MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Passport_series", SqlDbType.Int).Value = passport_series.Text;
                         MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
-                        req = $@"EXEC UserRegistration @Name, @Surname, @Sex, @Date_of_birth, @Passport_id, 
+                        request = $@"EXEC UserRegistration @Name, @Surname, @Sex, @Date_of_birth, @Passport_id, 
                                                    @Passport_series, @Login, @Password;";
-                        tableWithData = MySingleton.Instance.SqlServer.Select(req);
-                        string res = tableWithData.Rows[0].ItemArray[0].ToString();
-                        if (res == "1")
+                        tableWithData = MySingleton.Instance.SqlServer.Select(request);
+                        if (tableWithData.Rows[0].ItemArray[0].ToString() == "1")
                         {
                             MySingleton.Instance.MainWindow.main.Navigate(new MainPage());
                             MessageBox.Show("Вы успешно зарегистрировались.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
