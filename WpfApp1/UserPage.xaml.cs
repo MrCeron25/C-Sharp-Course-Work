@@ -15,10 +15,10 @@ namespace WpfApp1
         private bool IsPurchasedTickets()
         {
             bool res = false; //нет билетов
-            MySingleton.Instance.SqlServer.cmd.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
+            Singleton.Instance.SqlServer.cmd.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
             string req = $@"select * from get_user_tickets(@IdPassenger);";
-            DataTable data = MySingleton.Instance.SqlServer.Select(req);
-            MySingleton.Instance.SqlServer.cmd.Parameters.Clear();
+            DataTable data = Singleton.Instance.SqlServer.Select(req);
+            Singleton.Instance.SqlServer.cmd.Parameters.Clear();
             if (data != null && data.Rows.Count > 0)
             {
                 //есть билеты
@@ -41,9 +41,9 @@ namespace WpfApp1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (MySingleton.Instance.MainWindow.main.CanGoBack)
+            if (Singleton.Instance.MainWindow.main.CanGoBack)
             {
-                MySingleton.Instance.MainWindow.main.GoBack();
+                Singleton.Instance.MainWindow.main.GoBack();
             }
         }
 
@@ -62,13 +62,13 @@ namespace WpfApp1
             {
                 if (!string.IsNullOrEmpty(start.Text))
                 {
-                    MySingleton.Instance.SqlServer.cmd.Parameters.Add("@DepartureCity", SqlDbType.NVarChar).Value = from.Text;
-                    MySingleton.Instance.SqlServer.cmd.Parameters.Add("@ArrivalCity", SqlDbType.NVarChar).Value = to.Text;
-                    MySingleton.Instance.SqlServer.cmd.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = start.SelectedDate;
+                    Singleton.Instance.SqlServer.cmd.Parameters.Add("@DepartureCity", SqlDbType.NVarChar).Value = from.Text;
+                    Singleton.Instance.SqlServer.cmd.Parameters.Add("@ArrivalCity", SqlDbType.NVarChar).Value = to.Text;
+                    Singleton.Instance.SqlServer.cmd.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = start.SelectedDate;
                     if (!string.IsNullOrEmpty(end.Text))
                     {
                         //start: NOT empty end: NOT empty
-                        MySingleton.Instance.SqlServer.cmd.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = end.SelectedDate;
+                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = end.SelectedDate;
                         req = $@"select * from dbo.get_list_of_flights_with_dep_and_arr_date(@DepartureCity, @ArrivalCity, @StartDate, @EndDate);";
                     }
                     else
@@ -76,7 +76,7 @@ namespace WpfApp1
                         //start: NOT empty end: empty
                         req = $@"select * from dbo.get_list_of_flights_with_dep__date(@DepartureCity, @ArrivalCity, @StartDate);";
                     }
-                    DataTable data = MySingleton.Instance.SqlServer.Select(req);
+                    DataTable data = Singleton.Instance.SqlServer.Select(req);
 
                     //ComboBox comboBox = new ComboBox();
                     //data.Columns.Add(new DataColumn("col", typeof(ComboBox)));
@@ -89,7 +89,7 @@ namespace WpfApp1
                     {
                         dataGrid.ItemsSource = null;
                     }
-                    MySingleton.Instance.SqlServer.cmd.Parameters.Clear();
+                    Singleton.Instance.SqlServer.cmd.Parameters.Clear();
                     dataGrid.SelectedIndex = -1;
                     buyTicket.IsEnabled = false;
                 }
@@ -117,14 +117,14 @@ namespace WpfApp1
         {
             DataRowView rowview = dataGrid.SelectedItem as DataRowView;
             uint id = uint.Parse(rowview.Row[0].ToString());
-            MySingleton.Instance.MainWindow.main.Navigate(new BuyTicket(id, passengerId));
+            Singleton.Instance.MainWindow.main.Navigate(new BuyTicket(id, passengerId));
             dataGrid.ItemsSource = null;
             buyTicket.IsEnabled = false;
         }
 
         private void myTicket_Click(object sender, RoutedEventArgs e)
         {
-            MySingleton.Instance.MainWindow.main.Navigate(new MyTicketsPage(passengerId));
+            Singleton.Instance.MainWindow.main.Navigate(new MyTicketsPage(passengerId));
         }
     }
 }

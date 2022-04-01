@@ -2,16 +2,16 @@
 
 namespace WpfApp1
 {
-    public class MySingleton
+    public class Singleton
     {
-        private static MySingleton _INSTANCE;
-        public static MySingleton Instance
+        private static Singleton _INSTANCE;
+        public static Singleton Instance
         {
             get
             {
                 if (_INSTANCE == null)
                 {
-                    _INSTANCE = new MySingleton();
+                    _INSTANCE = new Singleton();
                 }
                 return _INSTANCE;
             }
@@ -29,9 +29,9 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
-            MySingleton.Instance.SqlServer = new SqlServer(new SqlConfig(@".\SQLEXPRESS", "course_work", true));
-            MySingleton.Instance.MainWindow = this;
-            MySingleton.Instance.MainWindow.main.Navigate(new MainPage());
+            Singleton.Instance.SqlServer = new SqlServer(new SqlConfig(@".\SQLEXPRESS", "course_work", true));
+            Singleton.Instance.MainWindow = this;
+            Singleton.Instance.MainWindow.main.Navigate(new MainPage());
         }
     }
 }

@@ -6,12 +6,10 @@ using System.Linq;
 
 namespace WpfApp1
 {
-    /// <summary>
-    /// Логика взаимодействия для Registration.xaml
-    /// </summary>
     public partial class Registration : Page
     {
         private string request;
+        private DataTable data;
         public Registration()
         {
             InitializeComponent();
@@ -19,26 +17,18 @@ namespace WpfApp1
 
         private static bool CheckPassword(string password)
         {
-            //min 6 chars
-            if (password.Length < 8)
-                return false;
-            //At least 1 upper case letter
-            if (!password.Any(char.IsUpper))
-                return false;
-            //At least 1 lower case letter
-            if (!password.Any(char.IsLower))
-                return false;
-            //At least 1 special char
-            string specialCharacters = @"%!@#$%^&*()?/>.<,:;'\|}]{[_~`+=-" + "\"";
-            char[] specialCharactersArray = specialCharacters.ToCharArray();
-            foreach (char c in specialCharactersArray)
+            bool res = false;
+            char[] specialCharactersArray = "%!@#$%^&*()?/>.<,:;'\\|}]{[_~`+=-\"".ToCharArray();
+            //min 6 chars OR At least 1 upper case letter OR At least 1 lower case letter
+            if (password.Length < 8 || !password.Any(char.IsUpper) || !password.Any(char.IsLower))
             {
-                if (password.Contains(c))
-                {
-                    return true;
-                }
+                res = false;
             }
-            return false;
+            else if (password.Any(specialCharactersArray.Contains)) // At least 1 special char
+            {
+                res = true;
+            }
+            return res;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -55,37 +45,37 @@ namespace WpfApp1
                 if (CheckPassword(password.Password))
                 {
                     // проверка логина в бд
-                    MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
+                    Singleton.Instance.SqlServer.cmd.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
                     request = $@"select [login] from [system]
                                 where [login] = @Login;";
-                    DataTable tableWithData = MySingleton.Instance.SqlServer.Select(request);
-                    if (tableWithData.Rows.Count > 0)
+                    data = Singleton.Instance.SqlServer.Select(request);
+                    if (data.Rows.Count > 0)
                     {
                         MessageBox.Show("Логин уже занят.", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                     else
                     {
-                        MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Name", SqlDbType.NVarChar).Value = name.Text;
-                        MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Surname", SqlDbType.NVarChar).Value = surname.Text;
-                        MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Sex", SqlDbType.NVarChar).Value = sex.Text;
-                        MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Date_of_birth", SqlDbType.Date).Value = date_of_birth.Text;
-                        MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Passport_id", SqlDbType.Int).Value = passport_id.Text;
-                        MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Passport_series", SqlDbType.Int).Value = passport_series.Text;
-                        MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
+                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Name", SqlDbType.NVarChar).Value = name.Text;
+                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Surname", SqlDbType.NVarChar).Value = surname.Text;
+                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Sex", SqlDbType.NVarChar).Value = sex.Text;
+                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Date_of_birth", SqlDbType.Date).Value = date_of_birth.Text;
+                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Passport_id", SqlDbType.Int).Value = passport_id.Text;
+                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Passport_series", SqlDbType.Int).Value = passport_series.Text;
+                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
                         request = $@"EXEC UserRegistration @Name, @Surname, @Sex, @Date_of_birth, @Passport_id, 
-                                                   @Passport_series, @Login, @Password;";
-                        tableWithData = MySingleton.Instance.SqlServer.Select(request);
-                        if (tableWithData.Rows[0].ItemArray[0].ToString() == "1")
+                                                           @Passport_series, @Login, @Password;";
+                        data = Singleton.Instance.SqlServer.Select(request);
+                        if (data.Rows[0].ItemArray[0].ToString() == "1")
                         {
-                            MySingleton.Instance.MainWindow.main.Navigate(new MainPage());
+                            Singleton.Instance.MainWindow.main.Navigate(new MainPage());
                             MessageBox.Show("Вы успешно зарегистрировались.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else
                         {
-                            MessageBox.Show($"Ошибка запроса.\n{tableWithData.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
-                    MySingleton.Instance.SqlServer.cmd.Parameters.Clear();
+                    Singleton.Instance.SqlServer.cmd.Parameters.Clear();
                 }
                 else
                 {
@@ -100,9 +90,9 @@ namespace WpfApp1
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            if (MySingleton.Instance.MainWindow.main.CanGoBack)
+            if (Singleton.Instance.MainWindow.main.CanGoBack)
             {
-                MySingleton.Instance.MainWindow.main.GoBack();
+                Singleton.Instance.MainWindow.main.GoBack();
             }
         }
 

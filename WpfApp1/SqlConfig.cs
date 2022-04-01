@@ -2,11 +2,11 @@
 {
     public class SqlConfig
     {
-        public string DataSource { get; set; }
+        public string DataSource;
 
-        public string DataBaseName { get; set; }
+        public string DataBaseName;
 
-        public bool IntegratedSecurity { get; set; }
+        public bool IntegratedSecurity;
 
         public SqlConfig(string dataSource, string dataBaseName, bool integratedSecurity = true)
         {

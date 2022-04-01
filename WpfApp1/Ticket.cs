@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 
 namespace WpfApp1
 {
@@ -51,9 +50,9 @@ namespace WpfApp1
 
         public void SaveTicket(string pathToDir)
         {
-            string fileName = $@"\{ticketId} {name} {surname} {flightName}.txt";
-            string fullPath = pathToDir + fileName;
-            using (FileStream fs = new FileStream(fullPath, FileMode.OpenOrCreate))
+            string fileName = $@"{ticketId} {name} {surname} {flightName}.txt";
+            string fullPath = $"{pathToDir}\\{fileName}";
+            using (FileStream fs = new FileStream(fullPath, FileMode.Create))
             {
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
@@ -64,20 +63,10 @@ namespace WpfApp1
 
         public string CreateTicket()
         {
-            const uint symCount = 100;
-            string res = "";
-            res += Tools.GetSym(symCount, '=');
-            res += '\n';
-
-            res += $"Номер билета : {ticketId}\nНомер рейса : {flightId}\nРейс : {flightName}\nМесто : {seatNumber}\nГород вылета : {departureCity}\nГород прилёта : {arrivalCity}\nФамилия : {surname}\nИмя : {name}\nПол : {sex}\nВремя отправления : {departureDate.ToString("dd.MM.yyyy HH:mm")}\nВремя прилёта : {arrivalDate.ToString("dd.MM.yyyy HH:mm")}\nВремя в пути : {travelTime.ToString("HH:mm")}\nЦена : {price}\n";
-
-            res += Tools.GetSym(symCount, '=');
+            const char sym = '='; // символ для линии
+            const uint symCount = 40; // количество знаков для линии
+            string res = $"{Tools.GetSym(symCount, sym)}\nНомер билета : {ticketId}\nНомер рейса : {flightId}\nРейс : {flightName}\nМесто : {seatNumber}\nГород вылета : {departureCity}\nГород прилёта : {arrivalCity}\nФамилия : {surname}\nИмя : {name}\nПол : {sex}\nВремя отправления : {departureDate.ToString("dd.MM.yyyy HH:mm")}\nВремя прилёта : {arrivalDate.ToString("dd.MM.yyyy HH:mm")}\nВремя в пути : {travelTime.ToString("HH:mm")}\nЦена : {price}\n{Tools.GetSym(symCount, sym)}";
             return res;
         }
-
-        //public override string ToString()
-        //{
-        //    return $@"{name} {surname} {flightNumber} {from} {to} {dateTime} {seatNumber}";
-        //}
     }
 }

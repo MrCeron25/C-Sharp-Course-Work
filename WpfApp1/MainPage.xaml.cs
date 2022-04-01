@@ -11,21 +11,22 @@ namespace WpfApp1
     public partial class MainPage : Page
     {
         private string request;
+        private DataTable data;
         public MainPage()
         {
             InitializeComponent();
-            MySingleton.Instance.SqlServer.OpenConnection();
+            Singleton.Instance.SqlServer.OpenConnection();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MySingleton.Instance.SqlServer.CloseConnection();
-            MySingleton.Instance.MainWindow.Close();
+            Singleton.Instance.SqlServer.CloseConnection();
+            Singleton.Instance.MainWindow.Close();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            MySingleton.Instance.MainWindow.main.Navigate(new Registration());
+            Singleton.Instance.MainWindow.main.Navigate(new Registration());
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -34,23 +35,23 @@ namespace WpfApp1
                                    login.Text,
                                    password.Password))
             {
-                MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
-                MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
+                Singleton.Instance.SqlServer.cmd.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
+                Singleton.Instance.SqlServer.cmd.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
                 request = $@"select [login],[password],[is_admin],id_passenger from [system]
-                                where [login] = @Login AND [password] = @Password;";
-                DataTable tableWithData = MySingleton.Instance.SqlServer.Select(request);
-                if (tableWithData.Rows.Count > 0)
+                             where [login] = @Login AND [password] = @Password;";
+                data = Singleton.Instance.SqlServer.Select(request);
+                if (data.Rows.Count > 0)
                 {
-                    uint passenger_id = uint.Parse(tableWithData.Rows[0].ItemArray[3].ToString());
-                    if (tableWithData.Rows[0].ItemArray[2].ToString() == "True")
+                    uint passenger_id = uint.Parse(data.Rows[0].ItemArray[3].ToString());
+                    if (data.Rows[0].ItemArray[2].ToString() == "True")
                     {
                         // админ
-                        MySingleton.Instance.MainWindow.main.Navigate(new AdminPage());
+                        Singleton.Instance.MainWindow.main.Navigate(new AdminPage());
                     }
                     else
                     {
                         // пользователь
-                        MySingleton.Instance.MainWindow.main.Navigate(new UserPage(passenger_id, login.Text));
+                        Singleton.Instance.MainWindow.main.Navigate(new UserPage(passenger_id, login.Text));
                     }
                 }
                 else
@@ -58,7 +59,7 @@ namespace WpfApp1
                     password.Password = "";
                     MessageBox.Show("Неверный логин или пароль.", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
-                MySingleton.Instance.SqlServer.cmd.Parameters.Clear();
+                Singleton.Instance.SqlServer.cmd.Parameters.Clear();
             }
             else
             {

@@ -1,23 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WpfApp1
 {
-    /// <summary>
-    /// Логика взаимодействия для PageFlights.xaml
-    /// </summary>
     public partial class PageFlights : Page
     {
         public PageFlights()
@@ -27,9 +12,9 @@ namespace WpfApp1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (MySingleton.Instance.MainWindow.main.CanGoBack)
+            if (Singleton.Instance.MainWindow.main.CanGoBack)
             {
-                MySingleton.Instance.MainWindow.main.GoBack();
+                Singleton.Instance.MainWindow.main.GoBack();
             }
         }
     }

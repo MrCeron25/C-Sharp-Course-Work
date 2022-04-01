@@ -11,12 +11,10 @@ namespace WpfApp1
         public static bool CheckStrings(Func<string, bool> func, params string[] arr)
         {
             HashSet<bool> bools = new HashSet<bool>();
-
-            foreach (var item in arr)
+            foreach (string item in arr)
             {
                 bools.Add(func.Invoke(item));
             }
-
             return bools.All(it => it);
         }
 
@@ -29,15 +27,6 @@ namespace WpfApp1
             }
             return result;
         }
-
-        //public static List<T> GetListItems<T>(T data)
-        //{
-        //    List<T> res = new List<T>;
-        //    foreach (var item in data)
-        //    {
-        //        res
-        //    }
-        //}
 
         public static void TextBoxChangeColors(TextBox textBox, BrushConverter converter)
         {
