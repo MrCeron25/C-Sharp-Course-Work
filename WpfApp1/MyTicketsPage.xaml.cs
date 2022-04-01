@@ -1,20 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.IO;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Win32;
 
 namespace WpfApp1
 {
@@ -23,14 +11,14 @@ namespace WpfApp1
     /// </summary>
     public partial class MyTicketsPage : Page
     {
-        private uint passengerId;
+        private readonly uint passengerId;
         public MyTicketsPage(uint PassengerId)
         {
             InitializeComponent();
             passengerId = PassengerId;
             MySingleton.Instance.SqlServer.cmd.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
             string req = $@"select * from get_user_tickets(@IdPassenger);";
-            DataTable data = MySingleton.Instance.SqlServer.GetDataTable(req);
+            DataTable data = MySingleton.Instance.SqlServer.Select(req);
             MySingleton.Instance.SqlServer.cmd.Parameters.Clear();
             if (data != null && data.Rows.Count > 0)
             {
@@ -52,7 +40,7 @@ namespace WpfApp1
             // получение инф о пользователе
             MySingleton.Instance.SqlServer.cmd.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
             string req = $@"select name,surname,sex from passengers where id = @IdPassenger;";
-            DataTable data = MySingleton.Instance.SqlServer.GetDataTable(req);
+            DataTable data = MySingleton.Instance.SqlServer.Select(req);
             MySingleton.Instance.SqlServer.cmd.Parameters.Clear();
             DataRow row = data.Rows[0];
             string name = row["name"].ToString();

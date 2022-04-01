@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 namespace WpfApp1
 {
     /// <summary>
@@ -21,7 +9,9 @@ namespace WpfApp1
     /// </summary>
     public partial class BuyTicket : Page
     {
-        private uint passengerId, idFlight, numberOfSeat;
+        private readonly uint passengerId;
+        private readonly uint idFlight;
+        private readonly uint numberOfSeat;
 
         private List<int> GetFreeSeats(List<int> dontFreeSeats, uint numberOfSeat)
         {
@@ -43,14 +33,14 @@ namespace WpfApp1
 
             MySingleton.Instance.SqlServer.cmd.Parameters.Add("@FlightId", SqlDbType.BigInt).Value = idFlight;
             string req = $@"select * from dbo.get_occupied_seats(@FlightId);";
-            DataTable data = MySingleton.Instance.SqlServer.GetDataTable(req);
+            DataTable data = MySingleton.Instance.SqlServer.Select(req);
             List<int> dontFreeSeats = new List<int>();
             foreach (DataRow item in data.Rows)
             {
                 dontFreeSeats.Add(int.Parse(item[0].ToString()));
             }
             req = $@"select dbo.get_number_of_seats(@FlightId);";
-            data = MySingleton.Instance.SqlServer.GetDataTable(req);
+            data = MySingleton.Instance.SqlServer.Select(req);
             MySingleton.Instance.SqlServer.cmd.Parameters.Clear();
             foreach (DataRow item in data.Rows)
             {

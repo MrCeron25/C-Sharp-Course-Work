@@ -24,7 +24,7 @@ namespace WpfApp1
         private void UpdateTable()
         {
             string req = $@"select * from country;";
-            DataTable data = MySingleton.Instance.SqlServer.GetDataTable(req);
+            DataTable data = MySingleton.Instance.SqlServer.Select(req);
             if (data != null && data.Rows.Count > 0)
             {
                 dataGrid.ItemsSource = data.DefaultView;

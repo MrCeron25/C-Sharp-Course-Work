@@ -10,14 +10,14 @@ namespace WpfApp1
     /// </summary>
     public partial class UserPage : Page
     {
-        private uint passengerId;
+        private readonly uint passengerId;
         private string req;
         private bool IsPurchasedTickets()
         {
             bool res = false; //нет билетов
             MySingleton.Instance.SqlServer.cmd.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
             string req = $@"select * from get_user_tickets(@IdPassenger);";
-            DataTable data = MySingleton.Instance.SqlServer.GetDataTable(req);
+            DataTable data = MySingleton.Instance.SqlServer.Select(req);
             MySingleton.Instance.SqlServer.cmd.Parameters.Clear();
             if (data != null && data.Rows.Count > 0)
             {
@@ -86,7 +86,7 @@ namespace WpfApp1
                         //start: NOT empty end: empty
                         req = $@"select * from dbo.get_list_of_flights_with_dep__date(@DepartureCity, @ArrivalCity, @StartDate);";
                     }
-                    DataTable data = MySingleton.Instance.SqlServer.GetDataTable(req);
+                    DataTable data = MySingleton.Instance.SqlServer.Select(req);
                     if (data != null && data.Rows.Count > 0)
                     {
                         dataGrid.ItemsSource = data.DefaultView;

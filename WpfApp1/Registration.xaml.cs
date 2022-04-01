@@ -55,7 +55,7 @@ namespace WpfApp1
                     MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
                     string req = $@"select [login] from [system]
                                 where [login] = @Login;";
-                    DataTable tableWithData = MySingleton.Instance.SqlServer.GetDataTable(req);
+                    DataTable tableWithData = MySingleton.Instance.SqlServer.Select(req);
                     if (tableWithData.Rows.Count > 0)
                     {
                         MessageBox.Show("Логин уже занят.", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -71,7 +71,7 @@ namespace WpfApp1
                         MySingleton.Instance.SqlServer.cmd.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
                         req = $@"EXEC UserRegistration @Name, @Surname, @Sex, @Date_of_birth, @Passport_id, 
                                                    @Passport_series, @Login, @Password;";
-                        tableWithData = MySingleton.Instance.SqlServer.GetDataTable(req);
+                        tableWithData = MySingleton.Instance.SqlServer.Select(req);
                         string res = tableWithData.Rows[0].ItemArray[0].ToString();
                         if (res == "1")
                         {
