@@ -1,0 +1,22 @@
+﻿<Page x:Class="WpfApp1.AdminPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1"
+      mc:Ignorable="d" 
+      d:DesignHeight="420" d:DesignWidth="794"
+      Title="AdminPage">
+
+    <Grid  Background="White" Margin="0,0,9.6,10">
+        <Button Content="Назад" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Content="Города" HorizontalAlignment="Left" Margin="322,130,0,0" VerticalAlignment="Top" Width="150" Height="32" Click="Button_Click_2" />
+        <Button Content="Самолёты" HorizontalAlignment="Left" Margin="322,180,0,0" VerticalAlignment="Top" Width="150" Height="32" Click="Button_Click_3"/>
+        <Button Content="Рейсы" HorizontalAlignment="Left" Margin="322,230,0,0" VerticalAlignment="Top" Width="150" Height="32" Click="Button_Click_4"/>
+        <Button Content="Страны" HorizontalAlignment="Left" Margin="322,80,0,0" VerticalAlignment="Top" Width="150" Height="32" Click="Button_Click_1"/>
+
+
+
+
+    </Grid>
+</Page>
