@@ -37,16 +37,6 @@ namespace WpfApp1
             {
                 myTicket.IsEnabled = false;
             }
-
-            //cities = new List<string>();
-            //string req = "select * from dbo.GetCityName();";
-            //SqlTable tableWithData = MySingleton.Instance.SqlServer.GetDataFromExecute(req);
-            //for (int i = 0; i < tableWithData.Data.Count; i++)
-            //{
-            //    cities.Add(tableWithData.Data[i][0]);
-            //}
-            //start.BlackoutDates.Add(new CalendarDateRange(DateTime.Now));
-            //end.DisplayDateStart
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -87,6 +77,10 @@ namespace WpfApp1
                         req = $@"select * from dbo.get_list_of_flights_with_dep__date(@DepartureCity, @ArrivalCity, @StartDate);";
                     }
                     DataTable data = MySingleton.Instance.SqlServer.Select(req);
+
+                    //ComboBox comboBox = new ComboBox();
+                    //data.Columns.Add(new DataColumn("col", typeof(ComboBox)));
+
                     if (data != null && data.Rows.Count > 0)
                     {
                         dataGrid.ItemsSource = data.DefaultView;
