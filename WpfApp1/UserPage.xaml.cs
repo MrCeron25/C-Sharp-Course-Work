@@ -2,16 +2,17 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Data;
+using System.Collections.Generic;
 
 namespace WpfApp1
 {
-    /// <summary>
-    /// Логика взаимодействия для UserPage.xaml
-    /// </summary>
     public partial class UserPage : Page
     {
         private readonly uint passengerId;
-        private string req;
+        private uint numberOfSeat;
+        private string request;
+        private uint FlightId;
+        private DataTable data;
         private bool IsPurchasedTickets()
         {
             bool res = false; //нет билетов
@@ -69,17 +70,15 @@ namespace WpfApp1
                     {
                         //start: NOT empty end: NOT empty
                         Singleton.Instance.SqlServer.cmd.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = end.SelectedDate;
-                        req = $@"select * from dbo.get_list_of_flights_with_dep_and_arr_date(@DepartureCity, @ArrivalCity, @StartDate, @EndDate);";
+                        request = $@"select * from dbo.get_list_of_flights_with_dep_and_arr_date(@DepartureCity, @ArrivalCity, @StartDate, @EndDate);";
                     }
                     else
                     {
                         //start: NOT empty end: empty
-                        req = $@"select * from dbo.get_list_of_flights_with_dep__date(@DepartureCity, @ArrivalCity, @StartDate);";
+                        request = $@"select * from dbo.get_list_of_flights_with_dep__date(@DepartureCity, @ArrivalCity, @StartDate);";
                     }
-                    DataTable data = Singleton.Instance.SqlServer.Select(req);
+                    DataTable data = Singleton.Instance.SqlServer.Select(request);
 
-                    //ComboBox comboBox = new ComboBox();
-                    //data.Columns.Add(new DataColumn("col", typeof(ComboBox)));
 
                     if (data != null && data.Rows.Count > 0)
                     {
@@ -106,25 +105,75 @@ namespace WpfApp1
 
         private void Row_Click(object sender, MouseButtonEventArgs e)
         {
-            //selectedRow = dataGrid.SelectedIndex;
-            if (!buyTicket.IsEnabled && dataGrid.SelectedIndex != -1)
+            DataRowView rowview = dataGrid.SelectedItem as DataRowView;
+            FlightId = uint.Parse(rowview.Row[0].ToString());
+            Singleton.Instance.SqlServer.cmd.Parameters.Add("@FlightId", SqlDbType.BigInt).Value = FlightId;
+            request = $@"select * from dbo.get_occupied_seats(@FlightId);";
+            data = Singleton.Instance.SqlServer.Select(request);
+
+            List<uint> occupiedPlaces = new List<uint>();
+            foreach (DataRow item in data.Rows)
             {
-                buyTicket.IsEnabled = true;
+                occupiedPlaces.Add(uint.Parse(item[0].ToString()));
             }
+
+            request = $@"select dbo.get_number_of_seats(@FlightId);";
+            data = Singleton.Instance.SqlServer.Select(request);
+            Singleton.Instance.SqlServer.cmd.Parameters.Clear();
+
+            numberOfSeat = uint.Parse(data.Rows[0].ItemArray[0].ToString());
+            combobox.ItemsSource = GetFreeSeats(occupiedPlaces, numberOfSeat);
+            if (combobox.Items.Count > 0)
+            {
+                combobox.IsEnabled = true;
+            }
+        }
+
+        private List<uint> GetFreeSeats(List<uint> occupiedPlaces, uint numberOfSeat)
+        {
+            List<uint> res = new List<uint>();
+            for (uint i = 1; i <= numberOfSeat; i++)
+            {
+                if (!occupiedPlaces.Contains(i))
+                {
+                    res.Add(i);
+                }
+            }
+            return res;
         }
 
         private void buyTicket_Click(object sender, RoutedEventArgs e)
         {
-            DataRowView rowview = dataGrid.SelectedItem as DataRowView;
-            uint id = uint.Parse(rowview.Row[0].ToString());
-            Singleton.Instance.MainWindow.main.Navigate(new BuyTicket(id, passengerId));
+            uint seat_number = uint.Parse(combobox.SelectedItem.ToString());
+            Singleton.Instance.SqlServer.cmd.Parameters.Add("@FlightId", SqlDbType.BigInt).Value = FlightId;
+            Singleton.Instance.SqlServer.cmd.Parameters.Add("@SeatNumber", SqlDbType.BigInt).Value = seat_number;
+            Singleton.Instance.SqlServer.cmd.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
+            request = $@"insert into tickets(flight_id, seat_number,id_passenger) 
+                             values (@FlightId, @SeatNumber, @IdPassenger);";
+            int result = Singleton.Instance.SqlServer.ExecuteRequest(request);
+            if (result > 0)
+            {
+                MessageBox.Show("Вы успешно забронировали билет.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            Singleton.Instance.SqlServer.cmd.Parameters.Clear();
             dataGrid.ItemsSource = null;
             buyTicket.IsEnabled = false;
+            combobox.IsEnabled = false;
+            combobox.ItemsSource = null;
+            Button_Click_1(null, null); // обновление таблицы
         }
 
         private void myTicket_Click(object sender, RoutedEventArgs e)
         {
             Singleton.Instance.MainWindow.main.Navigate(new MyTicketsPage(passengerId));
+        }
+
+        private void combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!buyTicket.IsEnabled && dataGrid.SelectedIndex != -1 && combobox.SelectedIndex != -1)
+            {
+                buyTicket.IsEnabled = true;
+            }
         }
     }
 }

@@ -13,7 +13,7 @@
         <Button Content="Регистрация" HorizontalAlignment="Left" Margin="565,380,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="Button_Click_1"/>
         <Button Content="Выход" HorizontalAlignment="Left" Margin="684,380,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="Button_Click"/>
 
-        <TextBox x:Name="login" HorizontalAlignment="Left" Height="30" Margin="300,150,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="200" FontSize="18" Text="user4" TextChanged="login_TextChanged"/>
+        <TextBox x:Name="login" HorizontalAlignment="Left" Height="30" Margin="300,150,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="200" FontSize="18" Text="user5" TextChanged="login_TextChanged"/>
         <PasswordBox PasswordChanged="password_PasswordChanged" Password="123" x:Name="password" HorizontalAlignment="Left" Height="30" Margin="300,210,0,0" VerticalAlignment="Top" Width="200" FontSize="18"/>
         
         <TextBlock HorizontalAlignment="Left" Margin="300,130,0,0" TextWrapping="NoWrap" Text="Логин" VerticalAlignment="Top"/>
