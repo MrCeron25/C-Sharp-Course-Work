@@ -11,14 +11,14 @@ namespace WpfApp1
         private readonly uint passengerId;
         private uint numberOfSeat;
         private string request;
-        private uint FlightId;
+        private uint flightId;
         private DataTable data;
         private bool IsPurchasedTickets()
         {
             bool res = false; //нет билетов
             Singleton.Instance.SqlServer.cmd.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
-            string req = $@"select * from get_user_tickets(@IdPassenger);";
-            DataTable data = Singleton.Instance.SqlServer.Select(req);
+            request = $@"select * from get_user_tickets(@IdPassenger);";
+            DataTable data = Singleton.Instance.SqlServer.Select(request);
             Singleton.Instance.SqlServer.cmd.Parameters.Clear();
             if (data != null && data.Rows.Count > 0)
             {
@@ -106,9 +106,9 @@ namespace WpfApp1
         private void Row_Click(object sender, MouseButtonEventArgs e)
         {
             DataRowView rowview = dataGrid.SelectedItem as DataRowView;
-            FlightId = uint.Parse(rowview.Row[0].ToString());
-            Singleton.Instance.SqlServer.cmd.Parameters.Add("@FlightId", SqlDbType.BigInt).Value = FlightId;
-            request = $@"select * from dbo.get_occupied_seats(@FlightId);";
+            flightId = uint.Parse(rowview.Row[0].ToString());
+            Singleton.Instance.SqlServer.cmd.Parameters.Add("@flightId", SqlDbType.BigInt).Value = flightId;
+            request = $@"select * from dbo.get_occupied_seats(@flightId);";
             data = Singleton.Instance.SqlServer.Select(request);
 
             List<uint> occupiedPlaces = new List<uint>();
@@ -117,7 +117,7 @@ namespace WpfApp1
                 occupiedPlaces.Add(uint.Parse(item[0].ToString()));
             }
 
-            request = $@"select dbo.get_number_of_seats(@FlightId);";
+            request = $@"select dbo.get_number_of_seats(@flightId);";
             data = Singleton.Instance.SqlServer.Select(request);
             Singleton.Instance.SqlServer.cmd.Parameters.Clear();
 
@@ -127,6 +127,9 @@ namespace WpfApp1
             {
                 combobox.IsEnabled = true;
             }
+
+            buyTicket.IsEnabled = false;
+            combobox.SelectedItem = null;
         }
 
         private List<uint> GetFreeSeats(List<uint> occupiedPlaces, uint numberOfSeat)
@@ -145,11 +148,11 @@ namespace WpfApp1
         private void buyTicket_Click(object sender, RoutedEventArgs e)
         {
             uint seat_number = uint.Parse(combobox.SelectedItem.ToString());
-            Singleton.Instance.SqlServer.cmd.Parameters.Add("@FlightId", SqlDbType.BigInt).Value = FlightId;
+            Singleton.Instance.SqlServer.cmd.Parameters.Add("@flightId", SqlDbType.BigInt).Value = flightId;
             Singleton.Instance.SqlServer.cmd.Parameters.Add("@SeatNumber", SqlDbType.BigInt).Value = seat_number;
             Singleton.Instance.SqlServer.cmd.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
             request = $@"insert into tickets(flight_id, seat_number,id_passenger) 
-                             values (@FlightId, @SeatNumber, @IdPassenger);";
+                             values (@flightId, @SeatNumber, @IdPassenger);";
             int result = Singleton.Instance.SqlServer.ExecuteRequest(request);
             if (result > 0)
             {
