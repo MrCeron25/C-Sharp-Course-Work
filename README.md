@@ -14,7 +14,7 @@
  
 
 Задания:
-1) PageCountries
+1) PageCountries +
 2) PageAirplanes
 3) PageCities
 4) PageFlights
