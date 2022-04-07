@@ -1,5 +1,5 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,12 +8,11 @@ namespace WpfApp1
 {
     public partial class PageCountries : Page
     {
-        private string request;
-        private DataTable data;
         private void UpdateTable()
         {
-            request = $@"select * from country;";
-            data = Singleton.Instance.SqlServer.Select(request);
+            string request = $@"select * from country;";
+            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+            DataTable data = Singleton.Instance.SqlServer.Select(command);
             if (data != null && data.Rows.Count > 0)
             {
                 dataGrid.ItemsSource = data.DefaultView;
@@ -54,9 +53,12 @@ namespace WpfApp1
         {
             DataRowView rowview = dataGrid.SelectedItem as DataRowView;
             uint id = uint.Parse(rowview.Row[0].ToString());
-            Singleton.Instance.SqlServer.cmd.Parameters.Add("@countryId", SqlDbType.BigInt).Value = id;
-            request = $@"EXECUTE DeleteCountry @countryId;";
-            data = Singleton.Instance.SqlServer.Select(request);
+
+            string request = $@"EXECUTE DeleteCountry @countryId;";
+            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+            command.Parameters.Add("@countryId", SqlDbType.BigInt).Value = id;
+
+            DataTable data = Singleton.Instance.SqlServer.Select(command);
             if (data.Rows[0].ItemArray[0].ToString() == "1")
             {
                 //MessageBox.Show("Город успешно удалён.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -65,7 +67,6 @@ namespace WpfApp1
             {
                 MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            Singleton.Instance.SqlServer.cmd.Parameters.Clear();
             UpdateTable();
             delete.IsEnabled = false;
             change.IsEnabled = false;
@@ -84,11 +85,12 @@ namespace WpfApp1
             window.action.Content = "Сохранить";
             if ((bool)window.ShowDialog() && window.textBox.Text != countyName)
             {
-                Singleton.Instance.SqlServer.cmd.Parameters.Add("@CountryId", SqlDbType.BigInt).Value = id;
-                Singleton.Instance.SqlServer.cmd.Parameters.Add("@NewName", SqlDbType.NVarChar).Value = window.textBox.Text;
-                request = $@"EXECUTE UpdateCountry @CountryId, @NewName;";
-                //request = $@"exec UpdateCountry @CountryId, @NewName;";
-                data = Singleton.Instance.SqlServer.Select(request);
+                string request = $@"EXECUTE UpdateCountry @CountryId, @NewName;";
+                SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+                command.Parameters.Add("@CountryId", SqlDbType.BigInt).Value = id;
+                command.Parameters.Add("@NewName", SqlDbType.NVarChar).Value = window.textBox.Text;
+
+                DataTable data = Singleton.Instance.SqlServer.Select(command);
                 if (data.Rows.Count > 0 && data.Rows[0].ItemArray[0].ToString() == "1")
                 {
                     //MessageBox.Show("Город успешно изменён.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -97,7 +99,6 @@ namespace WpfApp1
                 {
                     MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                Singleton.Instance.SqlServer.cmd.Parameters.Clear();
                 UpdateTable();
             }
         }
@@ -106,18 +107,23 @@ namespace WpfApp1
         {
             SubWindow window = new SubWindow();
             window.label.Content = "Название страны :";
-            window.Title = "Окно изменения";
+            window.Title = "Окно добавления";
             window.action.Content = "Добавить";
             if ((bool)window.ShowDialog())
             {
-                Singleton.Instance.SqlServer.cmd.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = window.textBox.Text;
-                request = $@"insert into country(name) values (@CountryName);";
-                int updatedRows = Singleton.Instance.SqlServer.ExecuteRequest(request);
+                string request = $@"insert into country(name) values (@CountryName);";
+                SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+                command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = window.textBox.Text;
+
+                int updatedRows = Singleton.Instance.SqlServer.ExecuteRequest(command);
                 if (updatedRows > 0)
                 {
                     //MessageBox.Show("Город успешно добавлен.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                } else
+                {
+                    MessageBox.Show($"Ошибка запроса.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                Singleton.Instance.SqlServer.cmd.Parameters.Clear();
+                
                 UpdateTable();
             }
         }

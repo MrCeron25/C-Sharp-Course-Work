@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,17 +10,17 @@ namespace WpfApp1
     public partial class MyTicketsPage : Page
     {
         private readonly uint passengerId;
-        private string request;
-        private DataTable data;
 
         public MyTicketsPage(uint PassengerId)
         {
             InitializeComponent();
             passengerId = PassengerId;
-            Singleton.Instance.SqlServer.cmd.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
-            request = $@"select * from get_user_tickets(@IdPassenger);";
-            data = Singleton.Instance.SqlServer.Select(request);
-            Singleton.Instance.SqlServer.cmd.Parameters.Clear();
+
+            string request = $@"select * from get_user_tickets(@IdPassenger);";
+            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+            command.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
+            
+            DataTable data = Singleton.Instance.SqlServer.Select(command);
             if (data != null && data.Rows.Count > 0) //есть билеты
             {
                 dataGrid.ItemsSource = data.DefaultView;
@@ -37,10 +38,12 @@ namespace WpfApp1
         private void SaveAllTickets()
         {
             // получение информации о пользователе
-            Singleton.Instance.SqlServer.cmd.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
-            request = $@"select name,surname,sex from passengers where id = @IdPassenger;";
-            data = Singleton.Instance.SqlServer.Select(request);
-            Singleton.Instance.SqlServer.cmd.Parameters.Clear();
+            string request = $@"select name,surname,sex from passengers where id = @IdPassenger;";
+            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+            command.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
+
+            DataTable data = Singleton.Instance.SqlServer.Select(command);
+            
             DataRow row = data.Rows[0];
             string name = row["name"].ToString();
             string surname = row["surname"].ToString();

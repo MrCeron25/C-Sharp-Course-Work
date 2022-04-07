@@ -9,8 +9,6 @@ namespace WpfApp1
     {
         private static SqlConfig sqlConfig;
         private static SqlConnection connection;
-        private static SqlDataAdapter dataAdapter;
-        public SqlCommand cmd;
 
         /// <summary>
         /// Констроктор
@@ -33,15 +31,14 @@ namespace WpfApp1
         /// <summary>
         /// Выборка данных (SELECT/PROC/FUNC)
         /// </summary>
-        /// <param name="sqlExpression">Строка запроса</param>
-        /// <returns>Таблица с данными</returns>
-        public DataTable Select(string sqlExpression)
+        /// <param name="sqlExpression">SqlCommand c запросом и подключением</param>
+        /// <returns>DataTable с данными</returns>
+        public DataTable Select(SqlCommand command)
         {
             DataTable Table = new DataTable();
             try
             {
-                cmd.CommandText = sqlExpression;
-                dataAdapter = new SqlDataAdapter(cmd);
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
                 dataAdapter.Fill(Table);
             }
             catch (Exception ex)
@@ -54,21 +51,29 @@ namespace WpfApp1
         /// <summary>
         /// Выполнить sql запрос (подходит для Update/Delete/Insert/PROC/FUNC) 
         /// </summary>
-        /// <param name="request">Строка запроса</param>
-        /// <returns>Возвращяет количесво изменных строк</returns>
-        public int ExecuteRequest(string request)
+        /// <param name="request">SqlCommand c запросом и подключением</param>
+        /// <returns>Количество затронутых строк</returns>
+        public int ExecuteRequest(SqlCommand command)
         {
             int affectedRows = 0;
             try
             {
-                cmd.CommandText = request;
-                affectedRows = cmd.ExecuteNonQuery();
+                affectedRows = command.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
                 ShowError(ex.Message);
             }
             return affectedRows;
+        }
+
+        public SqlCommand CreateSqlCommand(string command)
+        {
+            return new SqlCommand
+            {
+                Connection = connection,
+                CommandText = command
+            };
         }
 
         /// <summary>
@@ -82,10 +87,6 @@ namespace WpfApp1
                     Data Source={sqlConfig.DataSource};
                     Initial Catalog={sqlConfig.DataBaseName};
                     Integrated Security={sqlConfig.IntegratedSecurity};");
-                cmd = new SqlCommand
-                {
-                    Connection = connection
-                };
                 connection.Open(); // Открываем подключение
             }
             catch (Exception ex)

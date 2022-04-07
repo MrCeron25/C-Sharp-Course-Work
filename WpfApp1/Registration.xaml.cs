@@ -3,13 +3,12 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Data;
 using System.Linq;
+using System.Data.SqlClient;
 
 namespace WpfApp1
 {
     public partial class Registration : Page
     {
-        private string request;
-        private DataTable data;
         public Registration()
         {
             InitializeComponent();
@@ -45,26 +44,29 @@ namespace WpfApp1
                 if (CheckPassword(password.Password))
                 {
                     // проверка логина в бд
-                    Singleton.Instance.SqlServer.cmd.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
-                    request = $@"select [login] from [system]
+                    string request = $@"select [login] from [system]
                                 where [login] = @Login;";
-                    data = Singleton.Instance.SqlServer.Select(request);
+                    SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+                    command.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
+
+                    DataTable data = Singleton.Instance.SqlServer.Select(command);
                     if (data.Rows.Count > 0)
                     {
                         MessageBox.Show("Логин уже занят.", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                     else
                     {
-                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Name", SqlDbType.NVarChar).Value = name.Text;
-                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Surname", SqlDbType.NVarChar).Value = surname.Text;
-                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Sex", SqlDbType.NVarChar).Value = sex.Text;
-                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Date_of_birth", SqlDbType.Date).Value = date_of_birth.Text;
-                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Passport_id", SqlDbType.Int).Value = passport_id.Text;
-                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Passport_series", SqlDbType.Int).Value = passport_series.Text;
-                        Singleton.Instance.SqlServer.cmd.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
-                        request = $@"EXEC UserRegistration @Name, @Surname, @Sex, @Date_of_birth, @Passport_id, 
+                        command.CommandText = $@"EXEC UserRegistration @Name, @Surname, @Sex, @Date_of_birth, @Passport_id, 
                                                            @Passport_series, @Login, @Password;";
-                        data = Singleton.Instance.SqlServer.Select(request);
+                        command.Parameters.Add("@Name", SqlDbType.NVarChar).Value = name.Text;
+                        command.Parameters.Add("@Surname", SqlDbType.NVarChar).Value = surname.Text;
+                        command.Parameters.Add("@Sex", SqlDbType.NVarChar).Value = sex.Text;
+                        command.Parameters.Add("@Date_of_birth", SqlDbType.Date).Value = date_of_birth.Text;
+                        command.Parameters.Add("@Passport_id", SqlDbType.Int).Value = passport_id.Text;
+                        command.Parameters.Add("@Passport_series", SqlDbType.Int).Value = passport_series.Text;
+                        command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
+
+                        data = Singleton.Instance.SqlServer.Select(command);
                         if (data.Rows[0].ItemArray[0].ToString() == "1")
                         {
                             Singleton.Instance.MainWindow.main.Navigate(new MainPage());
@@ -75,7 +77,7 @@ namespace WpfApp1
                             MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
-                    Singleton.Instance.SqlServer.cmd.Parameters.Clear();
+                    
                 }
                 else
                 {

@@ -2,16 +2,12 @@
 using System.Windows.Media;
 using System.Data;
 using System.Windows.Controls;
+using System.Data.SqlClient;
 
 namespace WpfApp1
 {
-    /// <summary>
-    /// Логика взаимодействия для MainPage.xaml
-    /// </summary>
     public partial class MainPage : Page
     {
-        private string request;
-        private DataTable data;
         public MainPage()
         {
             InitializeComponent();
@@ -35,11 +31,13 @@ namespace WpfApp1
                                    login.Text,
                                    password.Password))
             {
-                Singleton.Instance.SqlServer.cmd.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
-                Singleton.Instance.SqlServer.cmd.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
-                request = $@"select [login],[password],[is_admin],id_passenger from [system]
+                string request = $@"select [login],[password],[is_admin],id_passenger from [system]
                              where [login] = @Login AND [password] = @Password;";
-                data = Singleton.Instance.SqlServer.Select(request);
+                SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+                command.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
+                command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
+
+                DataTable data = Singleton.Instance.SqlServer.Select(command);
                 if (data.Rows.Count > 0)
                 {
                     uint passenger_id = uint.Parse(data.Rows[0].ItemArray[3].ToString());
@@ -59,7 +57,7 @@ namespace WpfApp1
                     password.Password = "";
                     MessageBox.Show("Неверный логин или пароль.", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
-                Singleton.Instance.SqlServer.cmd.Parameters.Clear();
+                
             }
             else
             {
