@@ -12,6 +12,7 @@ namespace WpfApp1
         {
             string request = $@"select * from country;";
             SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+
             DataTable data = Singleton.Instance.SqlServer.Select(command);
             if (data != null && data.Rows.Count > 0)
             {
@@ -119,11 +120,12 @@ namespace WpfApp1
                 if (updatedRows > 0)
                 {
                     //MessageBox.Show("Город успешно добавлен.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                } else
+                }
+                else
                 {
                     MessageBox.Show($"Ошибка запроса.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                
+
                 UpdateTable();
             }
         }

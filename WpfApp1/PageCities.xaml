@@ -21,12 +21,18 @@
             x:Name="dataGrid"
             IsReadOnly="True"
             SelectionMode="Single"
-            HorizontalAlignment="Left" Height="366" Margin="10,34,0,0" VerticalAlignment="Top" Width="349" SelectionChanged="dataGrid_SelectionChanged">
+            HorizontalAlignment="Left" Height="360" Margin="10,40,0,0" VerticalAlignment="Top" Width="370" SelectionChanged="dataGrid_SelectionChanged">
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseLeftButtonUp" Handler="Row_Click"/>
                 </Style>
             </DataGrid.ItemContainerStyle>
         </DataGrid>
+        <DataGrid 
+            x:Name="dataGrid2"
+            IsReadOnly="True"
+            SelectionMode="Single"
+            HorizontalAlignment="Left" Height="360" Margin="404,40,0,0" VerticalAlignment="Top" Width="370"/>
+
     </Grid>
 </Page>

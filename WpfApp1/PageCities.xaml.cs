@@ -8,9 +8,10 @@ namespace WpfApp1
 {
     public partial class PageCities : Page
     {
-        private void UpdateTable()
+        private void UpdateCities()
         {
-            string request = $@"select * from country;";
+            string request = $@"select ci.name [Город], c.name [Страна] from cities ci
+                                left join country c on c.id=ci.country_id";
             SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
 
             DataTable data = Singleton.Instance.SqlServer.Select(command);
@@ -23,11 +24,30 @@ namespace WpfApp1
                 dataGrid.ItemsSource = null;
             }
         }
+
+        private void UpdateCountries()
+        {
+            string request = $@"select name [Страна] from country 
+                                order by id;";
+            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+
+            DataTable data = Singleton.Instance.SqlServer.Select(command);
+            if (data != null && data.Rows.Count > 0)
+            {
+                dataGrid2.ItemsSource = data.DefaultView;
+            }
+            else
+            {
+                dataGrid2.ItemsSource = null;
+            }
+        }
+
         public PageCities()
         {
             InitializeComponent();
+            UpdateCities();
+            UpdateCountries();
         }
-
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -69,8 +89,8 @@ namespace WpfApp1
                 {
                     MessageBox.Show($"Ошибка запроса.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-
-                UpdateTable();
+                UpdateCities();
+                UpdateCountries();
             }
         }
 
