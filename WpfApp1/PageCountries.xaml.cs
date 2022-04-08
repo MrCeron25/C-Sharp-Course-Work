@@ -10,7 +10,7 @@ namespace WpfApp1
     {
         private void UpdateTable()
         {
-            string request = $@"select * from country;";
+            string request = $@"select name [Страна] from country;";
             SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
 
             DataTable data = Singleton.Instance.SqlServer.Select(command);
@@ -40,56 +40,28 @@ namespace WpfApp1
 
         private void Row_Click(object sender, MouseButtonEventArgs e)
         {
-            if (!delete.IsEnabled && dataGrid.SelectedIndex != -1)
-            {
-                delete.IsEnabled = true;
-            }
             if (!change.IsEnabled && dataGrid.SelectedIndex != -1)
             {
                 change.IsEnabled = true;
             }
         }
 
-        private void delete_Click(object sender, RoutedEventArgs e)
-        {
-            DataRowView rowview = dataGrid.SelectedItem as DataRowView;
-            uint id = uint.Parse(rowview.Row[0].ToString());
-
-            string request = $@"EXECUTE DeleteCountry @countryId;";
-            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
-            command.Parameters.Add("@countryId", SqlDbType.BigInt).Value = id;
-
-            DataTable data = Singleton.Instance.SqlServer.Select(command);
-            if (data.Rows[0].ItemArray[0].ToString() == "1")
-            {
-                //MessageBox.Show("Город успешно удалён.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            UpdateTable();
-            delete.IsEnabled = false;
-            change.IsEnabled = false;
-        }
-
         private void change_Click(object sender, RoutedEventArgs e)
         {
             DataRowView rowview = dataGrid.SelectedItem as DataRowView;
-            string countyName = rowview.Row[1].ToString();
-            string id = rowview.Row[0].ToString();
+            string countyName = rowview.Row[0].ToString();
 
-            SubWindow window = new SubWindow();
+            SubWindowCities window = new SubWindowCities();
             window.label.Content = "Страна :";
             window.textBox.Text = countyName;
             window.Title = "Окно изменения";
             window.action.Content = "Сохранить";
             if ((bool)window.ShowDialog() && window.textBox.Text != countyName)
             {
-                string request = $@"EXECUTE UpdateCountry @CountryId, @NewName;";
+                string request = $@"EXECUTE UpdateCountry @CountryName, @NewName;";
                 SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
-                command.Parameters.Add("@CountryId", SqlDbType.BigInt).Value = id;
                 command.Parameters.Add("@NewName", SqlDbType.NVarChar).Value = window.textBox.Text;
+                command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = countyName;
 
                 DataTable data = Singleton.Instance.SqlServer.Select(command);
                 if (data.Rows.Count > 0 && data.Rows[0].ItemArray[0].ToString() == "1")
@@ -106,7 +78,7 @@ namespace WpfApp1
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            SubWindow window = new SubWindow();
+            SubWindowCities window = new SubWindowCities();
             window.label.Content = "Название страны :";
             window.Title = "Окно добавления";
             window.action.Content = "Добавить";

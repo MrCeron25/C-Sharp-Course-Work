@@ -624,12 +624,16 @@ GO
 
 GO
 CREATE PROCEDURE UpdateCountry(
-	@CountryId bigint,
+	@CountryName nvarchar(255),
 	@NewCountryName nvarchar(255)
 ) AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION;
+
+		declare @CountryId bigint;
+		set @CountryId = (select id from country 
+						  where [name] = @CountryName);
 
 		update country
         set [name] = @NewCountryName

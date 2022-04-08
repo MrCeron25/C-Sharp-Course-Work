@@ -71,7 +71,7 @@ namespace WpfApp1
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            SubWindow window = new SubWindow();
+            SubWindowCities window = new SubWindowCities();
             window.label.Content = "Название города :";
             window.Title = "Окно добавления";
             window.action.Content = "Добавить";

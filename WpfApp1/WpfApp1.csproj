@@ -202,8 +202,8 @@
     </Compile>
     <Compile Include="SqlConfig.cs" />
     <Compile Include="SqlServer.cs" />
-    <Compile Include="PageCitiesSubWindow.xaml.cs">
-      <DependentUpon>PageCitiesSubWindow.xaml</DependentUpon>
+    <Compile Include="SubWindowCities.xaml.cs">
+      <DependentUpon>SubWindowCities.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ticket.cs" />
     <Compile Include="Tools.cs" />
@@ -254,7 +254,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PageCitiesSubWindow.xaml">
+    <Page Include="SubWindowCities.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

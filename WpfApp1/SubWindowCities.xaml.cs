@@ -3,9 +3,9 @@ using System.Windows.Controls;
 
 namespace WpfApp1
 {
-    public partial class SubWindow : Window
+    public partial class SubWindowCities : Window
     {
-        public SubWindow()
+        public SubWindowCities()
         {
             InitializeComponent();
         }
