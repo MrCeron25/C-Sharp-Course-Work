@@ -17,10 +17,10 @@ namespace WpfApp1
             bool res = false; //нет билетов
 
             string request = $@"select * from get_user_tickets(@IdPassenger);";
-            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+            SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
             command.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
 
-            DataTable data = Singleton.Instance.SqlServer.Select(command);
+            DataTable data = SqlServer.Instance.Select(command);
             if (data != null && data.Rows.Count > 0)
             {
                 //есть билеты
@@ -43,9 +43,9 @@ namespace WpfApp1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (Singleton.Instance.MainWindow.main.CanGoBack)
+            if (Manager.Instance.MainFrame.CanGoBack)
             {
-                Singleton.Instance.MainWindow.main.GoBack();
+                Manager.Instance.MainFrame.GoBack();
             }
         }
 
@@ -65,7 +65,7 @@ namespace WpfApp1
                 if (!string.IsNullOrEmpty(start.Text))
                 {
                     string request = "";
-                    SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+                    SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
                     command.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
                     command.Parameters.Add("@DepartureCity", SqlDbType.NVarChar).Value = from.Text;
                     command.Parameters.Add("@ArrivalCity", SqlDbType.NVarChar).Value = to.Text;
@@ -82,7 +82,7 @@ namespace WpfApp1
                         command.CommandText = $@"select * from dbo.get_list_of_flights_with_dep__date(@DepartureCity, @ArrivalCity, @StartDate);";
                     }
 
-                    DataTable data = Singleton.Instance.SqlServer.Select(command);
+                    DataTable data = SqlServer.Instance.Select(command);
                     if (data != null && data.Rows.Count > 0)
                     {
                         dataGrid.ItemsSource = data.DefaultView;
@@ -112,10 +112,10 @@ namespace WpfApp1
             flightId = uint.Parse(rowview.Row[0].ToString());
 
             string request = $@"select * from dbo.get_occupied_seats(@flightId);";
-            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+            SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
             command.Parameters.Add("@flightId", SqlDbType.BigInt).Value = flightId;
 
-            DataTable data = Singleton.Instance.SqlServer.Select(command);
+            DataTable data = SqlServer.Instance.Select(command);
 
             List<uint> occupiedPlaces = new List<uint>();
             foreach (DataRow item in data.Rows)
@@ -124,7 +124,7 @@ namespace WpfApp1
             }
 
             command.CommandText = $@"select dbo.get_number_of_seats(@flightId);";
-            data = Singleton.Instance.SqlServer.Select(command);
+            data = SqlServer.Instance.Select(command);
             
 
             numberOfSeat = uint.Parse(data.Rows[0].ItemArray[0].ToString());
@@ -157,12 +157,12 @@ namespace WpfApp1
 
             string request = $@"insert into tickets(flight_id, seat_number,id_passenger) 
                              values (@flightId, @SeatNumber, @IdPassenger);";
-            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+            SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
             command.Parameters.Add("@flightId", SqlDbType.BigInt).Value = flightId;
             command.Parameters.Add("@SeatNumber", SqlDbType.BigInt).Value = seat_number;
             command.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
 
-            int result = Singleton.Instance.SqlServer.ExecuteRequest(command);
+            int result = SqlServer.Instance.ExecuteRequest(command);
             if (result > 0)
             {
                 MessageBox.Show("Вы успешно забронировали билет.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -177,7 +177,7 @@ namespace WpfApp1
 
         private void myTicket_Click(object sender, RoutedEventArgs e)
         {
-            Singleton.Instance.MainWindow.main.Navigate(new MyTicketsPage(passengerId));
+            Manager.Instance.MainFrame.Navigate(new MyTicketsPage(passengerId));
         }
 
         private void combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)

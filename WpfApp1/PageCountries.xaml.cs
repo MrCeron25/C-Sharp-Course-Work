@@ -11,9 +11,9 @@ namespace WpfApp1
         private void UpdateTable()
         {
             string request = $@"select name [Страна] from country;";
-            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+            SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
 
-            DataTable data = Singleton.Instance.SqlServer.Select(command);
+            DataTable data = SqlServer.Instance.Select(command);
             if (data != null && data.Rows.Count > 0)
             {
                 dataGrid.ItemsSource = data.DefaultView;
@@ -32,9 +32,9 @@ namespace WpfApp1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (Singleton.Instance.MainWindow.main.CanGoBack)
+            if (Manager.Instance.MainFrame.CanGoBack)
             {
-                Singleton.Instance.MainWindow.main.GoBack();
+                Manager.Instance.MainFrame.GoBack();
             }
         }
 
@@ -59,11 +59,11 @@ namespace WpfApp1
             if ((bool)window.ShowDialog() && window.textBox.Text != countyName)
             {
                 string request = $@"EXECUTE UpdateCountry @CountryName, @NewName;";
-                SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+                SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
                 command.Parameters.Add("@NewName", SqlDbType.NVarChar).Value = window.textBox.Text;
                 command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = countyName;
 
-                DataTable data = Singleton.Instance.SqlServer.Select(command);
+                DataTable data = SqlServer.Instance.Select(command);
                 if (data.Rows.Count > 0 && data.Rows[0].ItemArray[0].ToString() == "1")
                 {
                     //MessageBox.Show("Город успешно изменён.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -85,10 +85,10 @@ namespace WpfApp1
             if ((bool)window.ShowDialog())
             {
                 string request = $@"insert into country(name) values (@CountryName);";
-                SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+                SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
                 command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = window.textBox.Text;
 
-                int updatedRows = Singleton.Instance.SqlServer.ExecuteRequest(command);
+                int updatedRows = SqlServer.Instance.ExecuteRequest(command);
                 if (updatedRows > 0)
                 {
                     //MessageBox.Show("Город успешно добавлен.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);

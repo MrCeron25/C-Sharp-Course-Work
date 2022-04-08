@@ -17,10 +17,10 @@ namespace WpfApp1
             passengerId = PassengerId;
 
             string request = $@"select * from get_user_tickets(@IdPassenger);";
-            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+            SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
             command.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
             
-            DataTable data = Singleton.Instance.SqlServer.Select(command);
+            DataTable data = SqlServer.Instance.Select(command);
             if (data != null && data.Rows.Count > 0) //есть билеты
             {
                 dataGrid.ItemsSource = data.DefaultView;
@@ -29,9 +29,9 @@ namespace WpfApp1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (Singleton.Instance.MainWindow.main.CanGoBack)
+            if (Manager.Instance.MainFrame.CanGoBack)
             {
-                Singleton.Instance.MainWindow.main.GoBack();
+                Manager.Instance.MainFrame.GoBack();
             }
         }
 
@@ -39,10 +39,10 @@ namespace WpfApp1
         {
             // получение информации о пользователе
             string request = $@"select name,surname,sex from passengers where id = @IdPassenger;";
-            SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+            SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
             command.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
 
-            DataTable data = Singleton.Instance.SqlServer.Select(command);
+            DataTable data = SqlServer.Instance.Select(command);
             
             DataRow row = data.Rows[0];
             string name = row["name"].ToString();

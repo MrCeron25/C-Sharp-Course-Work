@@ -12,9 +12,9 @@ namespace WpfApp1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (Singleton.Instance.MainWindow.main.CanGoBack)
+            if (Manager.Instance.MainFrame.CanGoBack)
             {
-                Singleton.Instance.MainWindow.main.GoBack();
+                Manager.Instance.MainFrame.GoBack();
             }
         }
     }

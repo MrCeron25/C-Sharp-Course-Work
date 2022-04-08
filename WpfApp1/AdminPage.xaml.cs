@@ -15,30 +15,30 @@ namespace WpfApp1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (Singleton.Instance.MainWindow.main.CanGoBack)
+            if (Manager.Instance.MainFrame.CanGoBack)
             {
-                Singleton.Instance.MainWindow.main.GoBack();
+                Manager.Instance.MainFrame.GoBack();
             }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Singleton.Instance.MainWindow.main.Navigate(new PageCountries());
+            Manager.Instance.MainFrame.Navigate(new PageCountries());
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            Singleton.Instance.MainWindow.main.Navigate(new PageCities());
+            Manager.Instance.MainFrame.Navigate(new PageCities());
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            Singleton.Instance.MainWindow.main.Navigate(new PageAirplanes());
+            Manager.Instance.MainFrame.Navigate(new PageAirplanes());
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
-            Singleton.Instance.MainWindow.main.Navigate(new PageFlights());
+            Manager.Instance.MainFrame.Navigate(new PageFlights());
         }
     }
 }

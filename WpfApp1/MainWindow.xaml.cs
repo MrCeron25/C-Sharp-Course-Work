@@ -2,24 +2,6 @@
 
 namespace WpfApp1
 {
-    public class Singleton
-    {
-        private static Singleton _INSTANCE;
-        public static Singleton Instance
-        {
-            get
-            {
-                if (_INSTANCE == null)
-                {
-                    _INSTANCE = new Singleton();
-                }
-                return _INSTANCE;
-            }
-        }
-
-        public SqlServer SqlServer;
-        public MainWindow MainWindow;
-    }
 
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
@@ -29,9 +11,8 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
-            Singleton.Instance.SqlServer = new SqlServer(new SqlConfig(@".\SQLEXPRESS", "course_work", true));
-            Singleton.Instance.MainWindow = this;
-            Singleton.Instance.MainWindow.main.Navigate(new MainPage());
+            Manager.Instance.MainWindow = this;
+            Manager.Instance.MainFrame.Navigate(new MainPage());
         }
     }
 }

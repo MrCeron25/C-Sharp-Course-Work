@@ -7,6 +7,20 @@ namespace WpfApp1
 {
     public class SqlServer
     {
+
+        private static SqlServer _INSTANCE;
+        public static SqlServer Instance
+        {
+            get
+            {
+                if (_INSTANCE == null)
+                {
+                    _INSTANCE = new SqlServer(new SqlConfig(@".\SQLEXPRESS", "course_work", true));
+                }
+                return _INSTANCE;
+            }
+        }
+
         private static SqlConfig sqlConfig;
         private static SqlConnection connection;
 
@@ -23,7 +37,7 @@ namespace WpfApp1
         /// Вызов окна с ошибкой
         /// </summary>
         /// <param name="error">Текст ошибки</param>
-        private static void ShowError(string error)
+        private void ShowError(string error)
         {
             MessageBox.Show(error, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }

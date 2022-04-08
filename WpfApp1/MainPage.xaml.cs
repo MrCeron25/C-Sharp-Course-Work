@@ -11,18 +11,18 @@ namespace WpfApp1
         public MainPage()
         {
             InitializeComponent();
-            Singleton.Instance.SqlServer.OpenConnection();
+            SqlServer.Instance.OpenConnection();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Singleton.Instance.SqlServer.CloseConnection();
-            Singleton.Instance.MainWindow.Close();
+            SqlServer.Instance.CloseConnection();
+            Manager.Instance.MainWindow.Close();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Singleton.Instance.MainWindow.main.Navigate(new Registration());
+            Manager.Instance.MainFrame.Navigate(new Registration());
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -33,23 +33,23 @@ namespace WpfApp1
             {
                 string request = $@"select [login],[password],[is_admin],id_passenger from [system]
                              where [login] = @Login AND [password] = @Password;";
-                SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+                SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
                 command.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
                 command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
 
-                DataTable data = Singleton.Instance.SqlServer.Select(command);
+                DataTable data = SqlServer.Instance.Select(command);
                 if (data.Rows.Count > 0)
                 {
                     uint passenger_id = uint.Parse(data.Rows[0].ItemArray[3].ToString());
                     if (data.Rows[0].ItemArray[2].ToString() == "True")
                     {
                         // админ
-                        Singleton.Instance.MainWindow.main.Navigate(new AdminPage());
+                        Manager.Instance.MainFrame.Navigate(new AdminPage());
                     }
                     else
                     {
                         // пользователь
-                        Singleton.Instance.MainWindow.main.Navigate(new UserPage(passenger_id, login.Text));
+                        Manager.Instance.MainFrame.Navigate(new UserPage(passenger_id, login.Text));
                     }
                 }
                 else

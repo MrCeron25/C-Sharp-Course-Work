@@ -46,10 +46,10 @@ namespace WpfApp1
                     // проверка логина в бд
                     string request = $@"select [login] from [system]
                                 where [login] = @Login;";
-                    SqlCommand command = Singleton.Instance.SqlServer.CreateSqlCommand(request);
+                    SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
                     command.Parameters.Add("@Login", SqlDbType.NVarChar).Value = login.Text;
 
-                    DataTable data = Singleton.Instance.SqlServer.Select(command);
+                    DataTable data = SqlServer.Instance.Select(command);
                     if (data.Rows.Count > 0)
                     {
                         MessageBox.Show("Логин уже занят.", "Info", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -66,10 +66,10 @@ namespace WpfApp1
                         command.Parameters.Add("@Passport_series", SqlDbType.Int).Value = passport_series.Text;
                         command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password.Password;
 
-                        data = Singleton.Instance.SqlServer.Select(command);
+                        data = SqlServer.Instance.Select(command);
                         if (data.Rows[0].ItemArray[0].ToString() == "1")
                         {
-                            Singleton.Instance.MainWindow.main.Navigate(new MainPage());
+                            Manager.Instance.MainFrame.Navigate(new MainPage());
                             MessageBox.Show("Вы успешно зарегистрировались.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else
@@ -92,9 +92,9 @@ namespace WpfApp1
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            if (Singleton.Instance.MainWindow.main.CanGoBack)
+            if (Manager.Instance.MainFrame.CanGoBack)
             {
-                Singleton.Instance.MainWindow.main.GoBack();
+                Manager.Instance.MainFrame.GoBack();
             }
         }
 

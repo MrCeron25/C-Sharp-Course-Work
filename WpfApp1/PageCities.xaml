@@ -14,25 +14,18 @@
             x:Name="change"
             IsEnabled="False"
             Content="Изменить" HorizontalAlignment="Left" Margin="170,10,0,0" VerticalAlignment="Top" Width="75" Click="change_Click"/>
-        <Button x:Name="delete" IsEnabled="False"
-                Content="Удалить" HorizontalAlignment="Left" Margin="250,10,0,0" VerticalAlignment="Top" Width="75" Click="delete_Click"/>
         <Button Content="Добавить" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
         <DataGrid 
             x:Name="dataGrid"
             IsReadOnly="True"
             SelectionMode="Single"
-            HorizontalAlignment="Left" Height="360" Margin="10,40,0,0" VerticalAlignment="Top" Width="370" SelectionChanged="dataGrid_SelectionChanged">
+            HorizontalAlignment="Left" Height="360" Margin="10,40,0,0" VerticalAlignment="Top" Width="764" SelectionChanged="dataGrid_SelectionChanged">
             <DataGrid.ItemContainerStyle>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseLeftButtonUp" Handler="Row_Click"/>
                 </Style>
             </DataGrid.ItemContainerStyle>
         </DataGrid>
-        <DataGrid 
-            x:Name="dataGrid2"
-            IsReadOnly="True"
-            SelectionMode="Single"
-            HorizontalAlignment="Left" Height="360" Margin="404,40,0,0" VerticalAlignment="Top" Width="370"/>
 
     </Grid>
 </Page>
