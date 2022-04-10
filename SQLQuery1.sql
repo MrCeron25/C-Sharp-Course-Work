@@ -686,6 +686,40 @@ BEGIN
     END CATCH;
 END;
 GO
+--************************************************************************
+GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'UpdateAirplane' AND type = 'P')
+BEGIN
+   DROP PROCEDURE UpdateAirplane;
+END;
+GO
+
+GO
+CREATE PROCEDURE UpdateAirplane(
+	@AirplaneName nvarchar(255),
+	@NewAirplaneName nvarchar(255)
+) AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION;
+		declare @AirplaneId bigint;
+		set @AirplaneId = (select id from airplane 
+						  where [model] = @AirplaneName);
+
+		update airplane
+        set [model] = @NewAirplaneName
+        where id = @AirplaneId;
+
+        COMMIT;
+		SELECT 1;
+	END TRY
+    BEGIN CATCH
+        ROLLBACK;
+		SELECT 0,
+			   ERROR_MESSAGE() ErrorMessage; 
+    END CATCH;
+END;
+GO
 
 /*
 update cities
@@ -697,6 +731,7 @@ where id = 3
 
 select * from country
 select * from cities
+select * from airplane
 
 update flights
 set departure_city = null

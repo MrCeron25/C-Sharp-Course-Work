@@ -7,7 +7,6 @@
       mc:Ignorable="d" 
            d:DesignHeight="420" d:DesignWidth="794"
       Title="AddCountryAndCities">
-
     <Grid Background="White" Margin="0,0,9.6,10">
         <Button Content="Назад" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <Button
@@ -16,16 +15,28 @@
             Content="Изменить" HorizontalAlignment="Left" Margin="170,10,0,0" VerticalAlignment="Top" Width="75" Click="change_Click"/>
         <Button Content="Добавить" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
         <DataGrid 
+            AutoGenerateColumns="False"
             x:Name="dataGrid"
             IsReadOnly="True"
             SelectionMode="Single"
             HorizontalAlignment="Left" Height="360" Margin="10,40,0,0" VerticalAlignment="Top" Width="764" SelectionChanged="dataGrid_SelectionChanged">
-            <DataGrid.ItemContainerStyle>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="MouseLeftButtonUp" Handler="Row_Click"/>
-                </Style>
-            </DataGrid.ItemContainerStyle>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Страны" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Status}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox 
+                                Height="22" 
+                                SelectedItem="{Binding Status}"
+                                ItemsSource="{StaticResource StatusList}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
         </DataGrid>
-
     </Grid>
 </Page>

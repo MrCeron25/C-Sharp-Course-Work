@@ -108,6 +108,9 @@
     </Compile>
     <Compile Include="SqlConfig.cs" />
     <Compile Include="SqlServer.cs" />
+    <Compile Include="SubWindowAirplane.xaml.cs">
+      <DependentUpon>SubWindowAirplane.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SubWindowCities.xaml.cs">
       <DependentUpon>SubWindowCities.xaml</DependentUpon>
     </Compile>
@@ -159,6 +162,10 @@
     <Page Include="Registration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubWindowAirplane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SubWindowCities.xaml">
       <SubType>Designer</SubType>

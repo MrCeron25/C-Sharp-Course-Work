@@ -7,32 +7,52 @@ using System.Windows.Input;
 
 namespace WpfApp1
 {
+    public class StatusList : List<string>
+    {
+        public StatusList(List<string> data)
+        {
+            AddRange(data);
+        }
+    }
+
+
     public partial class PageCities : Page
     {
+        public List<string> countries;
         private void UpdateCities()
         {
-            string request = $@"select ci.name [Город] from cities ci;";
-            //string request = $@"select ci.name [Город], c.name [Страна] from cities ci
-            //                    left join country c on c.id=ci.country_id";
+            string request = $@"EXECUTE GetCountries;";
             SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
 
             DataTable data = SqlServer.Instance.Select(command);
+            foreach (DataRow item in data.Rows)
+            {
+                countries.Add(item["name"].ToString());
+                System.Console.WriteLine(item["name"]);
+            }
+
+            request = $@"select ci.name [Город] from cities ci;";
+            command = SqlServer.Instance.CreateSqlCommand(request);
+
+            data = SqlServer.Instance.Select(command);
             if (data != null && data.Rows.Count > 0)
             {
-                DataGridComboBoxColumn dataGridComboBox = new DataGridComboBoxColumn
-                {
-                    Header = "Страна",
-                    Width = 100
-                };
-                List<string> list = new List<string>
-                {
-                    "Item 1",
-                    "Item 2"
-                };
+                //DataGridComboBoxColumn dataGridComboBox = new DataGridComboBoxColumn
+                //{
+                //    Header = "Страна",
+                //    Width = 100
+                //};
+                //List<string> list = new List<string>
+                //{
+                //    "Item 1",
+                //    "Item 2"
+                //};
 
-                dataGridComboBox.ItemsSource = list;
-                dataGrid.ItemsSource = data.DefaultView;
+                //dataGridComboBox.ItemsSource = list;
                 //dataGrid.Columns.Add(dataGridComboBox);
+
+                dataGrid.ItemsSource = data.DefaultView;
+                //data.Columns.Add(dataGridComboBox);
                 //dataGrid.DataContext ;
             }
             else
@@ -44,6 +64,7 @@ namespace WpfApp1
         public PageCities()
         {
             InitializeComponent();
+            countries = new List<string>();
             UpdateCities();
         }
 

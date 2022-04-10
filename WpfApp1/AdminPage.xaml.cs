@@ -3,9 +3,6 @@ using System.Windows.Controls;
 
 namespace WpfApp1
 {
-    /// <summary>
-    /// Логика взаимодействия для AdminPage.xaml
-    /// </summary>
     public partial class AdminPage : Page
     {
         public AdminPage()

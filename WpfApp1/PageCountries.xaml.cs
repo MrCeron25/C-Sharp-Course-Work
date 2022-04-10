@@ -8,7 +8,7 @@ namespace WpfApp1
 {
     public partial class PageCountries : Page
     {
-        private void UpdateTable()
+        private void UpdateCountries()
         {
             string request = $@"select name [Страна] from country;";
             SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
@@ -27,7 +27,7 @@ namespace WpfApp1
         public PageCountries()
         {
             InitializeComponent();
-            UpdateTable();
+            UpdateCountries();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -72,7 +72,7 @@ namespace WpfApp1
                 {
                     MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                UpdateTable();
+                UpdateCountries();
             }
         }
 
@@ -98,7 +98,7 @@ namespace WpfApp1
                     MessageBox.Show($"Ошибка запроса.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
-                UpdateTable();
+                UpdateCountries();
             }
         }
     }
