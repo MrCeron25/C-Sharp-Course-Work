@@ -15,9 +15,8 @@
  
 Задания:
 1) PageCountries +
-2) PageAirplanes
+2) PageAirplanes +
 3) PageCities
 4) PageFlights
 
-Убрать удаление городов
 Добавить выпадающий список для городов (добавление/изменение)
