@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-
 namespace WpfApp1
 {
     public class Ticket
@@ -48,25 +46,9 @@ namespace WpfApp1
             sex = Sex;
         }
 
-        public void SaveTicket(string pathToDir)
+        public override string ToString()
         {
-            string fileName = $@"{ticketId} {name} {surname} {flightName}.txt";
-            string fullPath = $"{pathToDir}\\{fileName}";
-            using (FileStream fs = new FileStream(fullPath, FileMode.Create))
-            {
-                using (StreamWriter sw = new StreamWriter(fs))
-                {
-                    sw.Write(CreateTicket());
-                }
-            }
-        }
-
-        public string CreateTicket()
-        {
-            const char sym = '='; // символ для линии
-            const uint symCount = 40; // количество знаков для линии
-            string res = $"{Tools.GetSym(symCount, sym)}\nНомер билета : {ticketId}\nНомер рейса : {flightId}\nРейс : {flightName}\nМесто : {seatNumber}\nГород вылета : {departureCity}\nГород прилёта : {arrivalCity}\nФамилия : {surname}\nИмя : {name}\nПол : {sex}\nВремя отправления : {departureDate.ToString("dd.MM.yyyy HH:mm")}\nВремя прилёта : {arrivalDate.ToString("dd.MM.yyyy HH:mm")}\nВремя в пути : {travelTime.ToString("HH:mm")}\nЦена : {price}\n{Tools.GetSym(symCount, sym)}";
-            return res;
+            return $"Номер билета : {ticketId}\nНомер рейса : {flightId}\nРейс : {flightName}\nМесто : {seatNumber}\nГород вылета : {departureCity}\nГород прилёта : {arrivalCity}\nФамилия : {surname}\nИмя : {name}\nПол : {sex}\nВремя отправления : {departureDate.ToString("dd.MM.yyyy HH:mm")}\nВремя прилёта : {arrivalDate.ToString("dd.MM.yyyy HH:mm")}\nВремя в пути : {travelTime.ToString("HH:mm")}\nЦена : {price}";
         }
     }
 }

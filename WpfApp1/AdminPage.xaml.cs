@@ -37,5 +37,10 @@ namespace WpfApp1
         {
             Manager.Instance.MainFrame.Navigate(new PageFlights());
         }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            Manager.Instance.MainFrame.Navigate(new PassengerList());
+        }
     }
 }

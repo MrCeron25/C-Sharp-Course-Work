@@ -78,7 +78,7 @@ create table airplane(
 drop table if exists flights;
 create table flights(
 	id bigint identity primary key,
-	[flight_name] nvarchar(10) not null unique,
+	[flight_name] nvarchar(10) not null,
 	[departure_city] bigint,
 	[arrival_city] bigint,
 	airplane_id bigint not null,
@@ -250,6 +250,7 @@ insert into airplane([model], number_of_seats) values
 
 insert into flights([departure_city], [arrival_city], airplane_id, flight_name, travel_time,price,departure_date) values
 (1, 6, 1,'SU 1602',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),70000,convert(datetime,'2023-03-05 15:04:30',20)),
+(1, 6, 3,'SU 1602',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),65000,convert(datetime,'2024-01-09 07:34:29',20)),
 (1, 21, 1,'SU 6016',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),13000,convert(datetime,'2023-10-26 05:35:33',120)),
 (4, 10, 1,'SU 8043',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),100000,convert(datetime,'2024-01-22 06:52:49',120)),
 (2, 20, 2,'SU 9997',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),80000,convert(datetime,'2022-06-25 02:27:56',120)),
@@ -720,33 +721,57 @@ BEGIN
     END CATCH;
 END;
 GO
+--************************************************************************
+GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'GetPassengerList' AND type = 'P')
+BEGIN
+   DROP PROCEDURE GetPassengerList;
+END;
+GO
+
+GO
+CREATE PROCEDURE GetPassengerList(
+	@FlightName nvarchar(255),
+	@Date DATE
+) AS
+BEGIN
+	select 
+		pas.[name] [Имя],
+		pas.surname [Фамилия],
+		pas.sex [Пол],
+	    pas.date_of_birth [Дата рождения],
+		pas.passport_id [Номер паспорта],
+		pas.passport_series [Серия паспорта]
+	from tickets ti
+	join flights fl on fl.id = ti.flight_id
+	join passengers pas on pas.id = ti.id_passenger
+	where fl.flight_name = @FlightName AND
+		  CONVERT(DATE, fl.departure_date) = @Date;
+END;
+GO
+
+
+
 
 /*
-update cities
-set country_id = null
-where cities.country_id = 3
+select 
+	pas.[name] [Имя],
+	pas.surname [Фамилия],
+	pas.sex [Пол],
+	pas.date_of_birth [Дата рождения],
+	pas.passport_id [Номер паспорта],
+	pas.passport_series [Серия паспорта]
+from tickets ti
+join flights fl on fl.id = ti.flight_id
+join passengers pas on pas.id = ti.id_passenger
+where fl.flight_name = 'SU 1602' and
+	  CONVERT(DATE, fl.departure_date) = CONVERT(DATE, '2023-03-05 15:04:30');
+*/
 
-delete from country 
-where id = 3
 
+/*
 select * from country
 select * from cities
 select * from airplane
-
-update flights
-set departure_city = null
-where departure_city = 
-
-update flights
-set arrival_city = null
-where arrival_city = 
-
-delete from cities 
-where id = 
-
-
-select * from country
-
-exec UpdateCountry 4, 'КУКУ';
-
+select * from flights
 */

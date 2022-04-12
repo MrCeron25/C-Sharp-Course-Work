@@ -21,17 +21,16 @@ namespace WpfApp1
         public List<string> countries;
         private void UpdateCities()
         {
-            string request = $@"EXECUTE GetCountries;";
+            string request = $"EXECUTE GetCountries;";
             SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
 
             DataTable data = SqlServer.Instance.Select(command);
             foreach (DataRow item in data.Rows)
             {
                 countries.Add(item["name"].ToString());
-                System.Console.WriteLine(item["name"]);
             }
 
-            request = $@"select ci.name [Город] from cities ci;";
+            request = $"select ci.name [Город] from cities ci;";
             command = SqlServer.Instance.CreateSqlCommand(request);
 
             data = SqlServer.Instance.Select(command);
@@ -92,7 +91,7 @@ namespace WpfApp1
             window.action.Content = "Добавить";
             if ((bool)window.ShowDialog())
             {
-                string request = $@"insert into country(name) values (@CountryName);";
+                string request = $"insert into country(name) values (@CountryName);";
                 SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
                 command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = window.textBox.Text;
                 int updatedRows = SqlServer.Instance.ExecuteRequest(command);

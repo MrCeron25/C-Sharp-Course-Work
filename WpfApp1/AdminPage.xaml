@@ -14,6 +14,7 @@
         <Button Content="Самолёты" HorizontalAlignment="Left" Margin="322,180,0,0" VerticalAlignment="Top" Width="150" Height="32" Click="Button_Click_3"/>
         <Button Content="Рейсы" HorizontalAlignment="Left" Margin="322,230,0,0" VerticalAlignment="Top" Width="150" Height="32" Click="Button_Click_4"/>
         <Button Content="Страны" HorizontalAlignment="Left" Margin="322,80,0,0" VerticalAlignment="Top" Width="150" Height="32" Click="Button_Click_1"/>
+        <Button Content="Список пассажиров" HorizontalAlignment="Left" Margin="322,280,0,0" VerticalAlignment="Top" Width="150" Height="32" Click="Button_Click_5"/>
 
 
 

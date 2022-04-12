@@ -56,7 +56,7 @@ namespace WpfApp1
             window.action.Content = "Добавить";
             if ((bool)window.ShowDialog())
             {
-                string request = $@"insert into airplane([model], number_of_seats) values (@Model,@NumberOfSeats);";
+                string request = $"insert into airplane([model], number_of_seats) values (@Model,@NumberOfSeats);";
                 SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
                 command.Parameters.Add("@Model", SqlDbType.NVarChar).Value = window.textBoxModel.Text;
                 command.Parameters.Add("@NumberOfSeats", SqlDbType.NVarChar).Value = window.textBoxNumberSeats.Text;
@@ -86,7 +86,7 @@ namespace WpfApp1
             window.action.Content = "Сохранить";
             if ((bool)window.ShowDialog() && window.textBox.Text != modelName)
             {
-                string request = $@"EXECUTE UpdateAirplane @AirplaneName, @NewAirplaneName;";
+                string request = $"EXECUTE UpdateAirplane @AirplaneName, @NewAirplaneName;";
                 SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
                 command.Parameters.Add("@NewAirplaneName", SqlDbType.NVarChar).Value = window.textBox.Text;
                 command.Parameters.Add("@AirplaneName", SqlDbType.NVarChar).Value = modelName;

@@ -16,7 +16,7 @@ namespace WpfApp1
         {
             bool res = false; //нет билетов
 
-            string request = $@"select * from get_user_tickets(@IdPassenger);";
+            string request = $"select * from get_user_tickets(@IdPassenger);";
             SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
             command.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
 
@@ -74,12 +74,12 @@ namespace WpfApp1
                     {
                         //start: NOT empty end: NOT empty
                         command.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = end.SelectedDate;
-                        command.CommandText = $@"select * from dbo.get_list_of_flights_with_dep_and_arr_date(@DepartureCity, @ArrivalCity, @StartDate, @EndDate);";
+                        command.CommandText = $"select * from dbo.get_list_of_flights_with_dep_and_arr_date(@DepartureCity, @ArrivalCity, @StartDate, @EndDate);";
                     }
                     else
                     {
                         //start: NOT empty end: empty
-                        command.CommandText = $@"select * from dbo.get_list_of_flights_with_dep__date(@DepartureCity, @ArrivalCity, @StartDate);";
+                        command.CommandText = $"select * from dbo.get_list_of_flights_with_dep__date(@DepartureCity, @ArrivalCity, @StartDate);";
                     }
 
                     DataTable data = SqlServer.Instance.Select(command);
@@ -111,7 +111,7 @@ namespace WpfApp1
             DataRowView rowview = dataGrid.SelectedItem as DataRowView;
             flightId = uint.Parse(rowview.Row[0].ToString());
 
-            string request = $@"select * from dbo.get_occupied_seats(@flightId);";
+            string request = $"select * from dbo.get_occupied_seats(@flightId);";
             SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
             command.Parameters.Add("@flightId", SqlDbType.BigInt).Value = flightId;
 
@@ -123,7 +123,7 @@ namespace WpfApp1
                 occupiedPlaces.Add(uint.Parse(item[0].ToString()));
             }
 
-            command.CommandText = $@"select dbo.get_number_of_seats(@flightId);";
+            command.CommandText = $"select dbo.get_number_of_seats(@flightId);";
             data = SqlServer.Instance.Select(command);
             
 

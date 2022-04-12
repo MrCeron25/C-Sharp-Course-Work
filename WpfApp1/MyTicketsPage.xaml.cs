@@ -16,7 +16,7 @@ namespace WpfApp1
             InitializeComponent();
             passengerId = PassengerId;
 
-            string request = $@"select * from get_user_tickets(@IdPassenger);";
+            string request = $"select * from get_user_tickets(@IdPassenger);";
             SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
             command.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
             
@@ -38,18 +38,17 @@ namespace WpfApp1
         private void SaveAllTickets()
         {
             // получение информации о пользователе
-            string request = $@"select name,surname,sex from passengers where id = @IdPassenger;";
+            string request = $"select name,surname,sex from passengers where id = @IdPassenger;";
             SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
             command.Parameters.Add("@IdPassenger", SqlDbType.BigInt).Value = passengerId;
 
             DataTable data = SqlServer.Instance.Select(command);
-            
             DataRow row = data.Rows[0];
             string name = row["name"].ToString();
             string surname = row["surname"].ToString();
             string sex = row["sex"].ToString();
 
-            string saveFolder = $@"C:\Users\ARTEM\Desktop\КОРОНОВИРУС\21-22\БД\6 семестр\курсовая\WpfApp1\WpfApp1\Tickets";
+            string saveFolder = $@"C:\Users\ARTEM\Desktop\КОРОНОВИРУС\21-22\БД\6 семестр\курсовая\WpfApp1\WpfApp1\Tickets\";
             DataView view = (DataView)dataGrid.ItemsSource;
             foreach (DataRowView rowView in view)
             {
@@ -66,7 +65,9 @@ namespace WpfApp1
                                               name,
                                               surname,
                                               sex);
-                NewTicket.SaveTicket(saveFolder);
+                Saver.Save(saveFolder, 
+                           $"{NewTicket.ticketId} {NewTicket.name} {NewTicket.surname} {NewTicket.flightName}", 
+                           NewTicket.ToString());
             }
         }
         private void Button_Click_1(object sender, RoutedEventArgs e)

@@ -10,7 +10,7 @@ namespace WpfApp1
     {
         private void UpdateCountries()
         {
-            string request = $@"select name [Страна] from country;";
+            string request = $"select name [Страна] from country;";
             SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
 
             DataTable data = SqlServer.Instance.Select(command);
@@ -58,7 +58,7 @@ namespace WpfApp1
             window.action.Content = "Сохранить";
             if ((bool)window.ShowDialog() && window.textBox.Text != countyName)
             {
-                string request = $@"EXECUTE UpdateCountry @CountryName, @NewName;";
+                string request = $"EXECUTE UpdateCountry @CountryName, @NewName;";
                 SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
                 command.Parameters.Add("@NewName", SqlDbType.NVarChar).Value = window.textBox.Text;
                 command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = countyName;
@@ -84,7 +84,7 @@ namespace WpfApp1
             window.action.Content = "Добавить";
             if ((bool)window.ShowDialog())
             {
-                string request = $@"insert into country(name) values (@CountryName);";
+                string request = $"insert into country(name) values (@CountryName);";
                 SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
                 command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = window.textBox.Text;
 
