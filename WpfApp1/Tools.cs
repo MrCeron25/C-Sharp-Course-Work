@@ -18,16 +18,6 @@ namespace WpfApp1
             return bools.All(it => it);
         }
 
-        public static string GetSym(uint num, char sym)
-        {
-            string result = "";
-            for (int i = 0; i < num; i++)
-            {
-                result += sym;
-            }
-            return result;
-        }
-
         public static void TextBoxChangeColors(TextBox textBox, BrushConverter converter)
         {
             if (string.IsNullOrEmpty(textBox.Text))

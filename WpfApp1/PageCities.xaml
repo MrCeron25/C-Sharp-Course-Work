@@ -14,14 +14,13 @@
             IsEnabled="False"
             Content="Изменить" HorizontalAlignment="Left" Margin="170,10,0,0" VerticalAlignment="Top" Width="75" Click="change_Click"/>
         <Button Content="Добавить" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
-        <DataGrid 
-            AutoGenerateColumns="False"
+        <DataGrid
             x:Name="dataGrid"
             IsReadOnly="True"
             SelectionMode="Single"
             HorizontalAlignment="Left" Height="360" Margin="10,40,0,0" VerticalAlignment="Top" Width="764" SelectionChanged="dataGrid_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Страны" Width="120">
+                <!--<DataGridTemplateColumn Header="Страны" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Status}"/>
@@ -32,11 +31,21 @@
                             <ComboBox 
                                 Height="22" 
                                 SelectedItem="{Binding Status}"
-                                ItemsSource="{StaticResource StatusList}"/>
+                                ItemsSource="{Binding StatusList}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding Path=Value}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
+                -->
+                <DataGridTextColumn/>
+                <DataGridComboBoxColumn/>
             </DataGrid.Columns>
+
         </DataGrid>
     </Grid>
 </Page>

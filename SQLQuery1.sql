@@ -262,6 +262,8 @@ insert into flights([departure_city], [arrival_city], airplane_id, flight_name, 
 (1, 20, 9,'SU 8999',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),77000,convert(datetime,'2023-01-22 04:36:17',120)),
 (17, 9, 10,'SU 3146',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),66000,convert(datetime,'2023-12-07 04:24:49',120)),
 (14, 3, 8,'SU 1357',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),84000,convert(datetime,'2022-11-08 14:14:22',120)),
+(9, 5, 2,'SU 6498',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),5000,convert(datetime,'2022-01-01 14:14:22',120)),
+(6, 4, 7,'SU 1931',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),2000,convert(datetime,'2022-01-01 14:14:22',120)),
 (7, 8, 3,'SU 6943',dbo.GetRandTime(RAND(convert(varbinary, newId())),default,default),66000,convert(datetime,'2022-05-07 15:00:00',120));
 
 insert into tickets(flight_id, seat_number,id_passenger) values
@@ -364,7 +366,12 @@ insert into tickets(flight_id, seat_number,id_passenger) values
 (10,5, 20),
 (10,20, 8),
 (10,3, 2),
-(10,13, 3);
+(10,13, 3),
+(14,11, 7),
+(14,8, 14),
+(14,15, 3)
+--(15,11, 7)
+;
 
 --------------
 -- PROC 1
@@ -750,9 +757,6 @@ BEGIN
 END;
 GO
 
-
-
-
 /*
 select 
 	pas.[name] [Имя],
@@ -768,10 +772,57 @@ where fl.flight_name = 'SU 1602' and
 	  CONVERT(DATE, fl.departure_date) = CONVERT(DATE, '2023-03-05 15:04:30');
 */
 
-
 /*
 select * from country
 select * from cities
 select * from airplane
 select * from flights
+
+select ci.name [Город], co.name from cities ci
+join country co on co.id = ci.country_id
+
+select * from tickets ti
+select * from flights ti
+
+select 
+	ti.flight_id [Номер рейса],
+	sum(fl.price) [Сумма по всем билетам]
+from tickets ti
+join flights fl on fl.id = ti.flight_id
+group by ti.flight_id, fl.price
+
+select 
+	year(fl.departure_date) [Год],
+	DATENAME(month, fl.departure_date) [Месяц],
+	sum(fl.price) [Сумма по всем билетам]
+from tickets ti
+join flights fl on fl.id = ti.flight_id
+group by fl.departure_date
+order by fl.departure_date
 */
+
+
+
+
+--************************************************************************
+GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'GetStatisticsOnSoldTickets' AND type = 'P')
+BEGIN
+   DROP PROCEDURE GetStatisticsOnSoldTickets;
+END
+GO
+
+GO
+CREATE PROCEDURE GetStatisticsOnSoldTickets
+AS
+BEGIN
+	select 
+		year(fl.departure_date) [Год],
+		DATENAME(month, fl.departure_date) [Месяц],
+		sum(fl.price) [Сумма по всем билетам]
+	from tickets ti
+	join flights fl on fl.id = ti.flight_id
+	group by fl.departure_date
+	order by fl.departure_date
+END;
+GO

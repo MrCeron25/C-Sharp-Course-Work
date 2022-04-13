@@ -111,6 +111,9 @@
       <DependentUpon>Registration.xaml</DependentUpon>
     </Compile>
     <Compile Include="Saver.cs" />
+    <Compile Include="SoldTickets.xaml.cs">
+      <DependentUpon>SoldTickets.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SqlConfig.cs" />
     <Compile Include="SqlServer.cs" />
     <Compile Include="SubWindowAirplane.xaml.cs">
@@ -169,6 +172,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Registration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SoldTickets.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

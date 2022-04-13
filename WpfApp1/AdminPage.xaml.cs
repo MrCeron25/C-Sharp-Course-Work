@@ -42,5 +42,10 @@ namespace WpfApp1
         {
             Manager.Instance.MainFrame.Navigate(new PassengerList());
         }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            Manager.Instance.MainFrame.Navigate(new SoldTickets());
+        }
     }
 }

@@ -9,9 +9,10 @@ namespace WpfApp1
 {
     public class StatusList : List<string>
     {
-        public StatusList(List<string> data)
+        public StatusList()
         {
-            AddRange(data);
+            Add("Item 1");
+            Add("Item 2");
         }
     }
 
@@ -30,25 +31,31 @@ namespace WpfApp1
                 countries.Add(item["name"].ToString());
             }
 
-            request = $"select ci.name [Город] from cities ci;";
+            request = $@"select ci.name [Город], co.name from cities ci
+join country co on co.id = ci.country_id";
             command = SqlServer.Instance.CreateSqlCommand(request);
 
             data = SqlServer.Instance.Select(command);
             if (data != null && data.Rows.Count > 0)
             {
-                //DataGridComboBoxColumn dataGridComboBox = new DataGridComboBoxColumn
+                //foreach (DataRow item in data.Rows)
                 //{
-                //    Header = "Страна",
-                //    Width = 100
-                //};
-                //List<string> list = new List<string>
-                //{
-                //    "Item 1",
-                //    "Item 2"
-                //};
+                //    System.Console.WriteLine(item[0].ToString());
+                //}
+                DataGridComboBoxColumn dataGridComboBox = new DataGridComboBoxColumn
+                {
+                    Header = "Страна",
+                    Width = 100
+                };
+                List<string> list = new List<string>
+                {
+                    "Item 1",
+                    "Item 2"
+                };
 
-                //dataGridComboBox.ItemsSource = list;
-                //dataGrid.Columns.Add(dataGridComboBox);
+
+                dataGridComboBox.ItemsSource = list;
+                dataGrid.Columns.Add(dataGridComboBox);
 
                 dataGrid.ItemsSource = data.DefaultView;
                 //data.Columns.Add(dataGridComboBox);
