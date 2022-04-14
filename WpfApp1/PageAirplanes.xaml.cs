@@ -47,9 +47,9 @@ namespace WpfApp1
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Add_Click_1(object sender, RoutedEventArgs e)
         {
-            SubWindowAirplane window = new SubWindowAirplane();
+            SubWindowAirplaneAdd window = new SubWindowAirplaneAdd();
             window.labelModel.Content = "Модель :";
             window.labelNumberSeats.Content = "Количество мест :";
             window.Title = "Окно добавления";
@@ -79,7 +79,7 @@ namespace WpfApp1
             DataRowView rowview = dataGrid.SelectedItem as DataRowView;
             string modelName = rowview.Row[0].ToString();
 
-            SubWindowCities window = new SubWindowCities();
+            SubWindowAirplaneChange window = new SubWindowAirplaneChange();
             window.label.Content = "Модель :";
             window.textBox.Text = modelName;
             window.Title = "Окно изменения";

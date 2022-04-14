@@ -1,0 +1,18 @@
+﻿<Window x:Class="WpfApp1.SubWindowCitiesChange"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="SubWindowCitiesChange" Height="192.999" Width="200">
+    <Grid>
+        <Label Name="LabelTextBox" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="26" Margin="10,41,0,0" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="174" TextChanged="textBox_TextChanged"/>
+        <Button x:Name="action" Content="Действие" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="75" Click="action_Click"/>
+        <Button x:Name="cancel" Content="Отмена" HorizontalAlignment="Left" Margin="109,134,0,0" VerticalAlignment="Top" Width="75" Click="cancel_Click"/>
+        <Label x:Name="LabelComboBox" Content="Label" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="ComboBox" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top" Width="174"/>
+
+    </Grid>
+</Window>

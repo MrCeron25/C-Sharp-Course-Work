@@ -87,7 +87,23 @@ create table flights(
 	[travel_time] time not null,
 	[arrival_date] AS DATEADD(MINUTE, DATEDIFF(MINUTE, 0, [travel_time]), [departure_date]),
 	[price] float not null,
-	is_deleted bit default 0 not null,
+	FOREIGN KEY (airplane_id) REFERENCES airplane (id),
+	FOREIGN KEY ([departure_city]) REFERENCES cities (id),
+	FOREIGN KEY ([arrival_city]) REFERENCES cities (id)
+);
+
+-- архив
+drop table if exists archive_flights;
+create table archive_flights(
+	id bigint identity primary key,
+	[flight_name] nvarchar(10) not null,
+	[departure_city] bigint,
+	[arrival_city] bigint,
+	airplane_id bigint not null,
+	[departure_date] datetime not null, 
+	[travel_time] time not null,
+	[arrival_date] AS DATEADD(MINUTE, DATEDIFF(MINUTE, 0, [travel_time]), [departure_date]),
+	[price] float not null,
 	FOREIGN KEY (airplane_id) REFERENCES airplane (id),
 	FOREIGN KEY ([departure_city]) REFERENCES cities (id),
 	FOREIGN KEY ([arrival_city]) REFERENCES cities (id)
@@ -159,8 +175,8 @@ insert into [system]([login],[password],[is_admin],id_passenger) values
 ('user1', 'XKDBTUH5ERCVDBH', 1, 1),
 ('user2', 'ZRCK91MIKZJFL3X', 1, 2),
 ('user3', '2DI804OKODJB3LI', 1, 3),
-('user4', '123', 1, 4),
-('user5', '123', 0, 5),
+('user4', '1', 1, 4),
+('user5', '1', 0, 5),
 ('user6', 'G2OYD411QO77I02', 0, 6),
 ('user7', 'CB9B09ZKWLWKOH7', 0, 7),
 ('user8', 'VV576US7ZYLN8C3', 0, 8),
@@ -801,9 +817,6 @@ group by fl.departure_date
 order by fl.departure_date
 */
 
-
-
-
 --************************************************************************
 GO
 IF EXISTS (SELECT name FROM sysobjects WHERE name = 'GetStatisticsOnSoldTickets' AND type = 'P')
@@ -824,5 +837,34 @@ BEGIN
 	join flights fl on fl.id = ti.flight_id
 	group by fl.departure_date
 	order by fl.departure_date
+END;
+GO
+
+--************************************************************************
+GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'FlightsToArchive' AND type = 'P')
+BEGIN
+   DROP PROCEDURE FlightsToArchive;
+END;
+GO
+
+GO
+CREATE PROCEDURE FlightsToArchive(
+	@FlightId bigint
+) AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION;
+		
+
+
+        COMMIT;
+		SELECT 1;
+	END TRY
+    BEGIN CATCH
+        ROLLBACK;
+		SELECT 0,
+			   ERROR_MESSAGE() ErrorMessage; 
+    END CATCH;
 END;
 GO

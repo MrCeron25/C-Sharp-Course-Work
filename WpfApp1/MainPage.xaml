@@ -23,7 +23,7 @@
                  FontSize="18" 
                  Text="user4" 
                  TextChanged="login_TextChanged"/>
-        <PasswordBox PasswordChanged="password_PasswordChanged" Password="123" x:Name="password" HorizontalAlignment="Left" Height="30" Margin="300,210,0,0" VerticalAlignment="Top" Width="200" FontSize="18"/>
+        <PasswordBox PasswordChanged="password_PasswordChanged" Password="1" x:Name="password" HorizontalAlignment="Left" Height="30" Margin="300,210,0,0" VerticalAlignment="Top" Width="200" FontSize="18"/>
         
         <TextBlock HorizontalAlignment="Left" Margin="300,130,0,0" TextWrapping="NoWrap" Text="Логин" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="300,190,0,0" TextWrapping="NoWrap" Text="Пароль" VerticalAlignment="Top"/>

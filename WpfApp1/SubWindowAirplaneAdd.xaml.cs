@@ -3,9 +3,9 @@ using System.Windows.Controls;
 
 namespace WpfApp1
 {
-    public partial class SubWindowAirplane : Window
+    public partial class SubWindowAirplaneAdd : Window
     {
-        public SubWindowAirplane()
+        public SubWindowAirplaneAdd()
         {
             InitializeComponent();
         }

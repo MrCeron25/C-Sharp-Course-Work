@@ -51,7 +51,7 @@ namespace WpfApp1
             DataRowView rowview = dataGrid.SelectedItem as DataRowView;
             string countyName = rowview.Row[0].ToString();
 
-            SubWindowCities window = new SubWindowCities();
+            SubWindowCountryChange window = new SubWindowCountryChange();
             window.label.Content = "Страна :";
             window.textBox.Text = countyName;
             window.Title = "Окно изменения";
@@ -78,7 +78,7 @@ namespace WpfApp1
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            SubWindowCities window = new SubWindowCities();
+            SubWindowCountryAdd window = new SubWindowCountryAdd();
             window.label.Content = "Название страны :";
             window.Title = "Окно добавления";
             window.action.Content = "Добавить";
