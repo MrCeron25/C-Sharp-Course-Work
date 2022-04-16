@@ -100,14 +100,13 @@ namespace WpfApp1
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             SubWindowCitiesAdd window = new SubWindowCitiesAdd();
-            window.label.Content = "Название города :";
-            window.Title = "Окно добавления";
-            window.action.Content = "Добавить";
+            window.ComboBox.ItemsSource = GetUpdatedCountries();
             if ((bool)window.ShowDialog())
             {
-                string request = $"insert into country(name) values (@CountryName);";
+                string request = $"EXECUTE AddCities @CityName, @CountryName;";
                 SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
-                command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = window.textBox.Text;
+                command.Parameters.Add("@CityName", SqlDbType.NVarChar).Value = window.textBox.Text;
+                command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = window.ComboBox.SelectedItem.ToString();
                 int updatedRows = SqlServer.Instance.ExecuteRequest(command);
                 if (updatedRows > 0)
                 {
@@ -123,26 +122,32 @@ namespace WpfApp1
 
         private void change_Click(object sender, RoutedEventArgs e)
         {
+            DataRowView rowView = dataGrid.SelectedItem as DataRowView;
+            string CityName = rowView.Row.ItemArray[1].ToString();
+            string CountyName = rowView.Row.ItemArray[0].ToString();
             SubWindowCitiesChange window = new SubWindowCitiesChange();
-            window.LabelTextBox.Content = "Название города :";
-            window.LabelComboBox.Content = "Страна :";
             window.ComboBox.ItemsSource = GetUpdatedCountries();
-            window.Title = "Окно изменения";
-            window.action.Content = "Изменить";
-            if ((bool)window.ShowDialog())
+            window.ComboBox.SelectedItem = CountyName;
+            window.textBox.Text = CityName;
+            if ((bool)window.ShowDialog() && (
+                CountyName != window.ComboBox.SelectedItem.ToString() ||
+                CityName != window.textBox.Text))
             {
-                //string request = $"insert into country(name) values (@CountryName);";
-                //SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
-                //command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = window.textBox.Text;
-                //int updatedRows = SqlServer.Instance.ExecuteRequest(command);
-                //if (updatedRows > 0)
-                //{
-                //    //MessageBox.Show("Город успешно добавлен.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                //}
-                //else
-                //{
-                //    MessageBox.Show($"Ошибка запроса.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                //}
+                string request = $"EXECUTE ChangeCities @CityName, @NewCityName, @CountryName, @NewCountryName;";
+                SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
+                command.Parameters.Add("@CityName", SqlDbType.NVarChar).Value = CityName;
+                command.Parameters.Add("@NewCityName", SqlDbType.NVarChar).Value = window.textBox.Text;
+                command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = CountyName;
+                command.Parameters.Add("@NewCountryName", SqlDbType.NVarChar).Value = window.ComboBox.SelectedItem.ToString();
+                DataTable data = SqlServer.Instance.Select(command);
+                if (data.Rows[0].ItemArray[0].ToString() == "1")
+                {
+                    //MessageBox.Show("Изменения сохранены.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 UpdateCities();
             }
         }

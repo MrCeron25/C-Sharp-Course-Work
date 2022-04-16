@@ -122,6 +122,9 @@
     <Compile Include="SubWindowAirplaneChange.xaml.cs">
       <DependentUpon>SubWindowAirplaneChange.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SubWindowCitiesAdd.xaml.cs">
+      <DependentUpon>SubWindowCitiesAdd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SubWindowCitiesChange.xaml.cs">
       <DependentUpon>SubWindowCitiesChange.xaml</DependentUpon>
     </Compile>
@@ -130,9 +133,6 @@
     </Compile>
     <Compile Include="SubWindowCountryAdd.xaml.cs">
       <DependentUpon>SubWindowCountryAdd.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SubWindowCitiesAdd.xaml.cs">
-      <DependentUpon>SubWindowCitiesAdd.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ticket.cs" />
     <Compile Include="Tools.cs" />
@@ -199,6 +199,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SubWindowCitiesAdd.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SubWindowCitiesChange.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -210,10 +214,6 @@
     <Page Include="SubWindowCountryAdd.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SubWindowCitiesAdd.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserPage.xaml">
       <SubType>Designer</SubType>

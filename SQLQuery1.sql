@@ -37,6 +37,7 @@ GO
 drop table if exists tickets;
 drop table if exists passengers;
 drop table if exists flights;
+drop table if exists archive_flights;
 drop table if exists airplane;
 drop table if exists cities;
 drop table if exists country;
@@ -842,6 +843,108 @@ GO
 
 --************************************************************************
 GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'GetCountries' AND type = 'P')
+BEGIN
+   DROP PROCEDURE GetCountries;
+END
+GO
+
+GO
+CREATE PROCEDURE GetCountries
+AS
+BEGIN
+	select 
+		name
+	from country
+END;
+GO
+
+--************************************************************************
+GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'AddCities' AND type = 'P')
+BEGIN
+   DROP PROCEDURE AddCities;
+END;
+GO
+
+GO
+CREATE PROCEDURE AddCities(
+	@CityName nvarchar(255),
+	@CountryName nvarchar(255)
+) AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION;
+
+		declare @CountryId bigint;
+		set @CountryId = (select id from country where name = @CountryName);
+
+		insert into cities(name, country_id) values (@CityName, @CountryId);
+
+        COMMIT;
+		SELECT 1;
+	END TRY
+    BEGIN CATCH
+        ROLLBACK;
+		SELECT 0,
+			   ERROR_MESSAGE() ErrorMessage; 
+    END CATCH;
+END;
+GO
+--************************************************************************
+GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'ChangeCities' AND type = 'P')
+BEGIN
+   DROP PROCEDURE ChangeCities;
+END;
+GO
+
+GO
+CREATE PROCEDURE ChangeCities(
+	@CityName nvarchar(255),
+	@NewCityName nvarchar(255),
+	@CountryName nvarchar(255),
+	@NewCountryName nvarchar(255)
+) AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION;
+
+		update cities
+		set name = @NewCityName
+		where name = @CityName
+
+		declare @CountryId bigint;
+		set @CountryId = (select id from country 
+						  where name = @NewCountryName);
+
+		update cities 
+		set country_id = @CountryId
+		where name = @NewCityName;
+
+        COMMIT;
+		SELECT 1;
+	END TRY
+    BEGIN CATCH
+        ROLLBACK;
+		SELECT 0,
+			   ERROR_MESSAGE() ErrorMessage; 
+    END CATCH;
+END;
+GO
+/*
+select 
+	ci.id,
+	ci.name,
+	co.name 
+from cities ci
+join country co on	
+	ci.country_id = co.id
+*/
+
+--************************************************************************
+/*
+GO
 IF EXISTS (SELECT name FROM sysobjects WHERE name = 'FlightsToArchive' AND type = 'P')
 BEGIN
    DROP PROCEDURE FlightsToArchive;
@@ -868,3 +971,4 @@ BEGIN
     END CATCH;
 END;
 GO
+*/

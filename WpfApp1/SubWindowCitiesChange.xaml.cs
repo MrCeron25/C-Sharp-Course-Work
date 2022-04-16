@@ -10,16 +10,26 @@ namespace WpfApp1
             InitializeComponent();
         }
 
+        private void CheckEnabledButton()
+        {
+            if (ComboBox.SelectedItem != null)
+            {
+                if (Tools.CheckStrings(it => !string.IsNullOrEmpty(it),
+                                       textBox.Text,
+                                       ComboBox.SelectedItem.ToString()))
+                {
+                    save.IsEnabled = true;
+                }
+                else
+                {
+                    save.IsEnabled = false;
+                }
+            }
+        }
+
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(textBox.Text))
-            {
-                action.IsEnabled = false;
-            }
-            else if (action != null && !action.IsEnabled)
-            {
-                action.IsEnabled = true;
-            }
+            CheckEnabledButton();
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
@@ -31,6 +41,11 @@ namespace WpfApp1
         {
             DialogResult = true;
             Close();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CheckEnabledButton();
         }
     }
 }

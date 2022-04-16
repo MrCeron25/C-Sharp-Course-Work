@@ -5,12 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="SubWindowCitiesAdd" Height="140" Width="200">
+        Title="Окно добавления" Height="192.999" Width="200">
     <Grid>
-        <Label Name="label" Content="Label" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="26" Margin="10,36,0,0" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="174" TextChanged="textBox_TextChanged"/>
-        <Button x:Name="action" Content="Действие" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="75" Click="action_Click"/>
-        <Button x:Name="cancel" Content="Отмена" HorizontalAlignment="Left" Margin="109,81,0,0" VerticalAlignment="Top" Width="75" Click="cancel_Click"/>
-
+        <Label Name="LabelTextBox" Content="Название города :" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="26" Margin="10,41,0,0" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="174" TextChanged="textBox_TextChanged"/>
+        <Button x:Name="Add" 
+                Content="Добавить" 
+                IsEnabled="False"
+                HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="75" Click="action_Click"/>
+        <Button x:Name="cancel" Content="Отмена" HorizontalAlignment="Left" Margin="109,134,0,0" VerticalAlignment="Top" Width="75" Click="cancel_Click"/>
+        <Label x:Name="LabelComboBox" Content="Страна :" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="ComboBox" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top" Width="174" SelectionChanged="ComboBox_SelectionChanged"/>
     </Grid>
 </Window>
