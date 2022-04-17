@@ -103,6 +103,9 @@
     <Compile Include="PageFlights.xaml.cs">
       <DependentUpon>PageFlights.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PageFlightsAdd.xaml.cs">
+      <DependentUpon>PageFlightsAdd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Passenger.cs" />
     <Compile Include="PassengerList.xaml.cs">
       <DependentUpon>PassengerList.xaml</DependentUpon>
@@ -176,6 +179,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PageFlights.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PageFlightsAdd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

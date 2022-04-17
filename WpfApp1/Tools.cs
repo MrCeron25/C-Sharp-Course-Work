@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -8,6 +9,18 @@ namespace WpfApp1
 {
     public class Tools
     {
+        public static void ChangeDateFormatInDataTable(DataTable data)
+        {
+            foreach (DataColumn column in data.Columns)
+            {
+                if (column.DataType.FullName == "System.DateTime")
+                {
+                    //(column as DataGridTextColumn).Binding.StringFormat = "dd/MM/yyyy";
+                    //Console.WriteLine(column.DataType.FullName);
+                }
+            }
+        }
+
         public static bool CheckStrings(Func<string, bool> func, params string[] arr)
         {
             HashSet<bool> bools = new HashSet<bool>();

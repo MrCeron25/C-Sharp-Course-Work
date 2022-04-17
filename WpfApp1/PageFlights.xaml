@@ -10,6 +10,26 @@
 
     <Grid Background="White" Margin="0,0,9.6,10">
         <Button Content="Назад" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-
+        <DataGrid
+            x:Name="dataGrid"
+            IsReadOnly="True"
+            HorizontalAlignment="Left" 
+            Height="360"
+            Margin="10,40,0,0"
+            VerticalAlignment="Top" 
+            Width="764">
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseLeftButtonUp" Handler="Row_Click"/>
+                </Style>
+            </DataGrid.ItemContainerStyle>
+        </DataGrid>
+        <Button
+            x:Name="change"
+            IsEnabled="False"
+            Content="Изменить" HorizontalAlignment="Left" Margin="170,10,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Добавить" 
+            x:Name="Add"
+            HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Click="Add_Click"/>
     </Grid>
 </Page>

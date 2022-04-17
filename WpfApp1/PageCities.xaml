@@ -29,33 +29,6 @@
                     <EventSetter Event="MouseLeftButtonUp" Handler="Row_Click"/>
                 </Style>
             </DataGrid.ItemContainerStyle>
-            <!--<DataGrid.Columns>
-                
-
-                <DataGridTemplateColumn Header="Страны" Width="120">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Status}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate>
-                            <ComboBox 
-                                Height="22" 
-                                SelectedItem="{Binding Status}"
-                                ItemsSource="{Binding StatusList}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Label Content="{Binding Path=Value}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                </DataGridTemplateColumn>
-                
-            </DataGrid.Columns>
--->
         </DataGrid>
     </Grid>
 </Page>

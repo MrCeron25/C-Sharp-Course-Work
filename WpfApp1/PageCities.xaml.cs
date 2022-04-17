@@ -27,47 +27,13 @@ namespace WpfApp1
         private void UpdateCities()
         {
             string request = $@"select co.name [Страна], ci.name [Город] from cities ci
-                         join country co on co.id = ci.country_id";
+                                join country co on co.id = ci.country_id";
             SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
 
             DataTable data = SqlServer.Instance.Select(command);
             if (data != null && data.Rows.Count > 0)
             {
-
-                //DataGridComboBoxColumn dataGridComboBox = new DataGridComboBoxColumn();
-                //dataGridComboBox.HeaderText = "Name";
-                //dataGridComboBox.Items.Add("Ghanashyam");
-                //dataGridComboBox.Items.Add("Jignesh");
-                //dataGridComboBox.Items.Add("Ishver");
-                //dataGridComboBox..Add("Anand");
-                //dataGridComboBox.Name = "cmbName";
-                //dataGrid.Columns.Add(dgvCmb);
-
-                //foreach (DataRow item in data.Rows)
-                //{
-                //    System.Console.WriteLine(item[0].ToString());
-                //}
-                //DataGridComboBoxColumn dataGridComboBox = new DataGridComboBoxColumn
-                //{
-                //    Header = "Страна",
-                //    Width = 100
-                //};
-                //List<string> list = new List<string>
-                //{
-                //    "Item 1",
-                //    "Item 2"
-                //};
-
-
-                //dataGridComboBox.ItemsSource = list;
-                //dataGrid.Columns.Add(dataGridComboBox);
-
                 dataGrid.ItemsSource = data.DefaultView;
-                //data.Columns.Add(dataGridComboBox);
-                //dataGrid.DataContext ;
-
-                //dataGrid.DataContext = ;
-
             }
             else
             {

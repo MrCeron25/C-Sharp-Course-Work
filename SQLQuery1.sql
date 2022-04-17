@@ -932,6 +932,7 @@ BEGIN
     END CATCH;
 END;
 GO
+
 /*
 select 
 	ci.id,
@@ -940,7 +941,84 @@ select
 from cities ci
 join country co on	
 	ci.country_id = co.id
+
+select * from cities
+select * from airplane
 */
+
+
+--************************************************************************
+GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'GetFlights' AND type = 'P')
+BEGIN
+   DROP PROCEDURE GetFlights;
+END
+GO
+
+GO
+CREATE PROCEDURE GetFlights
+AS
+BEGIN
+	select 
+		fl.flight_name [Название рейса],
+		(select name from cities where id = fl.departure_city) [Город отправления], 
+		(select name from cities where id = fl.arrival_city) [Город прибытия],
+		fl.departure_date [Дата отправления],
+		fl.travel_time [Время в пути],
+		fl.arrival_date [Дата прибытия],
+		fl.price [Цена]
+	from flights fl
+	join airplane air on air.id = fl.airplane_id
+END;
+GO
+exec GetFlights;
+--************************************************************************
+GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'AddFlight' AND type = 'P')
+BEGIN
+   DROP PROCEDURE AddFlight;
+END;
+GO
+
+GO
+CREATE PROCEDURE AddFlight(
+	@DepartureCityName nvarchar(255),
+	@ArrivalCityName nvarchar(255),
+	@AirplaneName nvarchar(255),
+	@FlightName nvarchar(255),
+	@TraveTime time,
+	@Price float,
+	@DepartureDate datetime
+) AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION;
+
+		declare @DepartureCity bigint, @ArrivalCity bigint, @Airplane bigint;
+
+		set @DepartureCity = (select id from cities where name = @DepartureCityName);
+		set @ArrivalCity = (select id from cities where name = @ArrivalCityName);
+		set @Airplane = (select id from airplane where model = @AirplaneName);
+
+		insert into flights([departure_city], [arrival_city], airplane_id, flight_name, travel_time,price,departure_date) values
+		(@DepartureCity, 
+		@ArrivalCity, 
+		@Airplane,
+		@FlightName,
+		@TraveTime,
+		@Price,
+		@DepartureDate);
+
+        COMMIT;
+		SELECT 1;
+	END TRY
+    BEGIN CATCH
+        ROLLBACK;
+		SELECT 0,
+			   ERROR_MESSAGE() ErrorMessage; 
+    END CATCH;
+END;
+GO
 
 --************************************************************************
 /*
