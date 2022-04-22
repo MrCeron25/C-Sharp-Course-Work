@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,6 +25,7 @@ namespace WpfApp1
                 dataGrid.ItemsSource = null;
             }
         }
+
         public PageFlights()
         {
             InitializeComponent();
@@ -49,6 +51,20 @@ namespace WpfApp1
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             Manager.Instance.MainFrame.Navigate(new PageFlightsAdd());
+            UpdateFlights();
+        }
+
+        private void change_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView rowview = dataGrid.SelectedItem as DataRowView;
+            Flight flight = new Flight(rowview.Row[0].ToString(),
+                                       rowview.Row[1].ToString(),
+                                       rowview.Row[2].ToString(),
+                                       DateTime.Parse(rowview.Row[3].ToString()),
+                                       DateTime.Parse(rowview.Row[4].ToString()),
+                                       double.Parse(rowview.Row[6].ToString()),
+                                       rowview.Row[7].ToString());
+            Manager.Instance.MainFrame.Navigate(new PageFlightsChange(flight));
         }
     }
 }

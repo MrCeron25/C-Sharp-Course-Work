@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -56,6 +55,9 @@ namespace WpfApp1
         public PageFlightsAdd()
         {
             InitializeComponent();
+
+            travelTime.ValueChanged += new RoutedPropertyChangedEventHandler<object>(travelTime_TextChanged);
+
             airplanes.ItemsSource = GetAirplane();
             departureCity.ItemsSource = GetCities();
             departureDate.DisplayDateStart = DateTime.Now;
@@ -74,6 +76,7 @@ namespace WpfApp1
                                    arrivalCity.SelectedItem.ToString(),
                                    airplanes.SelectedItem.ToString(),
                                    departureDate.Text,
+                                   travelTime.Text,
                                    price.Text))
             {
                 Add.IsEnabled = true;
@@ -114,42 +117,14 @@ namespace WpfApp1
             CheckAddButton();
         }
 
-        private void travelTime_LostFocus(object sender, RoutedEventArgs e)
-        {
-            Regex regex = new Regex($@"00:00");
-            MatchCollection matches = regex.Matches(travelTime.Text);
-            if (matches.Count == 0 && travelTime.Text.Length == 5)
-            {
-                regex = new Regex($@"\d{2}:\d{2}");
-                matches = regex.Matches(travelTime.Text);
-                if (matches.Count == 0 &&
-                    byte.Parse(travelTime.Text.Substring(0, 2)) < 24 &&
-                    byte.Parse(travelTime.Text.Substring(3, 2)) < 60)
-                {
-                    CheckAddButton();
-                }
-                else
-                {
-                    travelTime.Text = $@"00:00";
-                }
-            }
-            else
-            {
-                travelTime.Text = $@"00:00";
-            }
-        }
-
         private void price_TextChanged(object sender, TextChangedEventArgs e)
         {
             uint res;
-            if (uint.TryParse(price.Text, out res))
-            {
-                CheckAddButton();
-            }
-            else
+            if (!uint.TryParse(price.Text, out res))
             {
                 price.Text = "";
             }
+            CheckAddButton();
         }
 
         private void airplanes_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -183,7 +158,12 @@ namespace WpfApp1
             {
                 MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            Button_Click(null, null);
+            Manager.Instance.MainFrame.Navigate(new PageFlights());
+        }
+
+        private void travelTime_TextChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            CheckAddButton();
         }
     }
 }

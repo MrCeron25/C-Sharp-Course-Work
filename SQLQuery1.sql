@@ -944,6 +944,7 @@ join country co on
 
 select * from cities
 select * from airplane
+select * from flights
 */
 
 
@@ -966,7 +967,8 @@ BEGIN
 		fl.departure_date [Дата отправления],
 		fl.travel_time [Время в пути],
 		fl.arrival_date [Дата прибытия],
-		fl.price [Цена]
+		fl.price [Цена],
+		air.model [Самолёт]
 	from flights fl
 	join airplane air on air.id = fl.airplane_id
 END;
@@ -1019,9 +1021,91 @@ BEGIN
     END CATCH;
 END;
 GO
-
 --************************************************************************
-/*
+GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'ChangeFlight' AND type = 'P')
+BEGIN
+   DROP PROCEDURE ChangeFlight;
+END;
+GO
+
+GO
+CREATE PROCEDURE ChangeFlight(
+	@FlightName nvarchar(255),
+	@DepartureCity nvarchar(255),
+	@ArrivalCity nvarchar(255),
+	@DepartureDate datetime,
+	@TravelTime time,
+	@Price float,
+	@Airplane nvarchar(255),
+	
+	@NewFlightName nvarchar(255),
+	@NewDepartureCity nvarchar(255),
+	@NewArrivalCity nvarchar(255),
+	@NewDepartureDate datetime,
+	@NewTravelTime time,
+	@NewPrice float,
+	@NewAirplane nvarchar(255)
+) AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION;
+
+		declare @IdDepartureCity bigint, 
+				@IdArrivalCity bigint,
+				@IdAirplane bigint,
+
+				@IdNewDepartureCity bigint, 
+				@IdNewArrivalCity bigint,
+				@IdNewAirplane bigint,
+
+				@FlightId bigint;
+
+		set @IdDepartureCity = (select id from cities where [name] = @DepartureCity);
+		set @IdArrivalCity = (select id from cities where [name] = @ArrivalCity);
+		set @IdAirplane = (select id from airplane where [model] = @Airplane);
+		
+		set @FlightId = (
+			select 
+				id
+			from flights fl
+			where 
+				fl.flight_name = @FlightName AND
+				fl.departure_city = @IdDepartureCity AND
+				fl.arrival_city = @IdArrivalCity AND
+				fl.departure_date = @DepartureDate AND
+				fl.travel_time = @TravelTime AND
+				fl.price = @Price AND
+				fl.airplane_id = @IdAirplane
+		);
+
+		set @IdNewDepartureCity = (select id from cities where [name] = @NewDepartureCity);
+		set @IdNewArrivalCity = (select id from cities where [name] = @NewArrivalCity);
+		set @IdNewAirplane = (select id from airplane where [model] = @NewAirplane);
+
+		update flights
+		set 
+			flight_name = @NewFlightName,
+			departure_city = @IdNewDepartureCity,
+			arrival_city = @IdNewArrivalCity,
+			departure_date = @NewDepartureDate,
+			travel_time = @NewTravelTime,
+			price = @NewPrice,
+			airplane_id = @IdNewAirplane
+		where id = @FlightId;
+			   
+        COMMIT;
+		SELECT 1;
+	END TRY
+    BEGIN CATCH
+        ROLLBACK;
+		SELECT 0,
+			   ERROR_MESSAGE() ErrorMessage; 
+    END CATCH;
+END;
+GO
+--************************************************************************
+
 GO
 IF EXISTS (SELECT name FROM sysobjects WHERE name = 'FlightsToArchive' AND type = 'P')
 BEGIN
@@ -1049,4 +1133,4 @@ BEGIN
     END CATCH;
 END;
 GO
-*/
+

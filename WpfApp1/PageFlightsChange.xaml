@@ -4,10 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1"
-      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="WpfApp1.PageFlightsAdd"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="WpfApp1.PageFlightsChange"
       mc:Ignorable="d" 
       d:DesignHeight="420" d:DesignWidth="794"
-      Title="PageFlightsAdd">
+      Title="PageFlightsChange">
 
     <Grid Background="White" 
           Margin="0,0,9.6,10">
@@ -73,14 +73,14 @@
             HorizontalAlignment="Left" 
             Margin="500,174,0,0" 
             VerticalAlignment="Top" RenderTransformOrigin="1.267,0.581"/>
-        <Button Content="Добавить" 
-                x:Name="Add"
+        <Button Content="Изменить" 
+                x:Name="Change"
                 HorizontalAlignment="Left" 
                 Margin="337,370,0,0"
                 VerticalAlignment="Top"
                 IsEnabled="False"
                 Height="23"
-                Width="120" Click="Add_Click"/>
+                Width="120" Click="Change_Click"/>
         <ComboBox HorizontalAlignment="Left" 
             Margin="340,290,0,0"
             x:Name="airplanes"
