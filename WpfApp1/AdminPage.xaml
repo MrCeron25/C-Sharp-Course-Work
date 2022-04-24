@@ -9,13 +9,13 @@
       Title="AdminPage">
 
     <Grid  Background="White" Margin="0,0,9.6,10">
-        <Button Content="Назад" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <Button Content="Страны" HorizontalAlignment="Left" Margin="307,50,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Button_Click_1"/>
-        <Button Content="Города" HorizontalAlignment="Left" Margin="307,100,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Button_Click_2" />
-        <Button Content="Самолёты" HorizontalAlignment="Left" Margin="307,150,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Button_Click_3"/>
-        <Button Content="Рейсы" HorizontalAlignment="Left" Margin="307,200,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Button_Click_4"/>
-        <Button Content="Список пассажиров" HorizontalAlignment="Left" Margin="307,250,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Button_Click_5"/>
-        <Button Content="Сумма проданных билетов" HorizontalAlignment="Left" Margin="307,300,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Button_Click_6"/>
+        <Button Content="Назад" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Back_Click"/>
+        <Button Content="Страны" HorizontalAlignment="Left" Margin="307,50,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Back_Click_1"/>
+        <Button Content="Города" HorizontalAlignment="Left" Margin="307,100,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Back_Click_2" />
+        <Button Content="Самолёты" HorizontalAlignment="Left" Margin="307,150,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Back_Click_3"/>
+        <Button Content="Рейсы" HorizontalAlignment="Left" Margin="307,200,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Back_Click_4"/>
+        <Button Content="Список пассажиров" HorizontalAlignment="Left" Margin="307,250,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Back_Click_5"/>
+        <Button Content="Сумма проданных билетов" HorizontalAlignment="Left" Margin="307,300,0,0" VerticalAlignment="Top" Width="180" Height="32" Click="Back_Click_6"/>
 
     </Grid>
 </Page>

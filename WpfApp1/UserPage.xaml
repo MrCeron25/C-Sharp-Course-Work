@@ -12,12 +12,12 @@
       Title="UserPage">
 
     <Grid Background="White" Margin="0,0,9.6,10">
-        <Button Content="Выйти из системы" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="115" Height="26" Click="Button_Click"/>
+        <Button Content="Выйти из системы" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="115" Height="26" Click="Back_Click"/>
         <Label Content="Город вылета" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
         <Label Content="Город прилёта" HorizontalAlignment="Left" Margin="170,41,0,0" VerticalAlignment="Top"/>
         <Label Content="Туда" HorizontalAlignment="Left" Margin="305,41,0,0" VerticalAlignment="Top"/>
         <Label Content="Обратно" HorizontalAlignment="Left" Margin="444,41,0,0" VerticalAlignment="Top"/>
-        <Button Content="Найти" HorizontalAlignment="Left" Margin="567,10,0,0" VerticalAlignment="Top" Width="207" Height="50" Click="Button_Click_1"/>
+        <Button Content="Найти" HorizontalAlignment="Left" Margin="567,10,0,0" VerticalAlignment="Top" Width="207" Height="50" Click="Back_Click_1"/>
         <TextBox Text="" x:Name="from" HorizontalAlignment="Left" Height="23" Margin="10,71,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="120" />
         <TextBox Text="" x:Name="to" HorizontalAlignment="Left" Height="23" Margin="170,72,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="120"/>
         <DatePicker DisplayDateStart="{Binding Mode=OneWay, Source={x:Static System:DateTime.Today}}" 

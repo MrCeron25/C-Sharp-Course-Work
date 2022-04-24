@@ -31,7 +31,7 @@ namespace WpfApp1
             UpdateAirplanes();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (Manager.Instance.MainFrame.CanGoBack)
             {
@@ -76,31 +76,34 @@ namespace WpfApp1
 
         private void change_Click(object sender, RoutedEventArgs e)
         {
-            DataRowView rowview = dataGrid.SelectedItem as DataRowView;
-            string modelName = rowview.Row[0].ToString();
-
-            SubWindowAirplaneChange window = new SubWindowAirplaneChange();
-            window.label.Content = "Модель :";
-            window.textBox.Text = modelName;
-            window.Title = "Окно изменения";
-            window.action.Content = "Сохранить";
-            if ((bool)window.ShowDialog() && window.textBox.Text != modelName)
+            if (dataGrid.SelectedItem != null)
             {
-                string request = $"EXECUTE UpdateAirplane @AirplaneName, @NewAirplaneName;";
-                SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
-                command.Parameters.Add("@NewAirplaneName", SqlDbType.NVarChar).Value = window.textBox.Text;
-                command.Parameters.Add("@AirplaneName", SqlDbType.NVarChar).Value = modelName;
+                DataRowView rowview = dataGrid.SelectedItem as DataRowView;
+                string modelName = rowview.Row[0].ToString();
 
-                DataTable data = SqlServer.Instance.Select(command);
-                if (data.Rows.Count > 0 && data.Rows[0].ItemArray[0].ToString() == "1")
+                SubWindowAirplaneChange window = new SubWindowAirplaneChange();
+                window.label.Content = "Модель :";
+                window.textBox.Text = modelName;
+                window.Title = "Окно изменения";
+                window.action.Content = "Сохранить";
+                if ((bool)window.ShowDialog() && window.textBox.Text != modelName)
                 {
-                    //MessageBox.Show("Модель успешно изменена.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    string request = $"EXECUTE UpdateAirplane @AirplaneName, @NewAirplaneName;";
+                    SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
+                    command.Parameters.Add("@NewAirplaneName", SqlDbType.NVarChar).Value = window.textBox.Text;
+                    command.Parameters.Add("@AirplaneName", SqlDbType.NVarChar).Value = modelName;
+
+                    DataTable data = SqlServer.Instance.Select(command);
+                    if (data.Rows.Count > 0 && data.Rows[0].ItemArray[0].ToString() == "1")
+                    {
+                        //MessageBox.Show("Модель успешно изменена.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    UpdateAirplanes();
                 }
-                else
-                {
-                    MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                UpdateAirplanes();
             }
         }
     }

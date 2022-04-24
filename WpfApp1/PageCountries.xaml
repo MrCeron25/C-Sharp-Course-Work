@@ -9,7 +9,7 @@
       Title="AddCountryAndCities">
 
     <Grid Background="White" Margin="0,0,9.6,10">
-        <Button Content="Назад" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Content="Назад" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Back_Click"/>
         <DataGrid 
             x:Name="dataGrid"
             IsReadOnly="True"
@@ -25,7 +25,7 @@
             x:Name="change"
             IsEnabled="False"
             Content="Изменить" HorizontalAlignment="Left" Margin="170,10,0,0" VerticalAlignment="Top" Width="75" Click="change_Click"/>
-        <Button Content="Добавить" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+        <Button Content="Добавить" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Click="Back_Click_1"/>
 
     </Grid>
 </Page>

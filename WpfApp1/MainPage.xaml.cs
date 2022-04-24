@@ -14,18 +14,18 @@ namespace WpfApp1
             SqlServer.Instance.OpenConnection();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             SqlServer.Instance.CloseConnection();
             Manager.Instance.MainWindow.Close();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Back_Click_1(object sender, RoutedEventArgs e)
         {
             Manager.Instance.MainFrame.Navigate(new Registration());
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void Back_Click_2(object sender, RoutedEventArgs e)
         {
             if (Tools.CheckStrings(it => !string.IsNullOrEmpty(it),
                                    login.Text,

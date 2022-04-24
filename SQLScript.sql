@@ -973,7 +973,9 @@ BEGIN
 	join airplane air on air.id = fl.airplane_id
 END;
 GO
-exec GetFlights;
+
+-- exec GetFlights;
+
 --************************************************************************
 GO
 IF EXISTS (SELECT name FROM sysobjects WHERE name = 'AddFlight' AND type = 'P')
@@ -988,7 +990,7 @@ CREATE PROCEDURE AddFlight(
 	@ArrivalCityName nvarchar(255),
 	@AirplaneName nvarchar(255),
 	@FlightName nvarchar(255),
-	@TraveTime time,
+	@TravelTime time,
 	@Price float,
 	@DepartureDate datetime
 ) AS
@@ -1007,7 +1009,7 @@ BEGIN
 		@ArrivalCity, 
 		@Airplane,
 		@FlightName,
-		@TraveTime,
+		@TravelTime,
 		@Price,
 		@DepartureDate);
 
@@ -1105,26 +1107,77 @@ BEGIN
 END;
 GO
 --************************************************************************
-
 GO
-IF EXISTS (SELECT name FROM sysobjects WHERE name = 'FlightsToArchive' AND type = 'P')
+IF EXISTS (SELECT * FROM sysobjects WHERE name = 'GetTotalMinutes' AND type IN ( N'FN', N'IF', N'TF', N'FS', N'FT' ))
 BEGIN
-   DROP PROCEDURE FlightsToArchive;
+   DROP FUNCTION GetTotalMinutes;
 END;
 GO
 
 GO
-CREATE PROCEDURE FlightsToArchive(
-	@FlightId bigint
+CREATE FUNCTION GetTotalMinutes(
+	@DateTime datetime
+) RETURNS bigint 
+AS
+BEGIN
+	RETURN DATEDIFF(MINUTE, DATEADD(DAY, DATEDIFF(DAY, 0, @DateTime), 0), @DateTime);
+END;
+GO
+--************************************************************************
+GO
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'FlightToArchive' AND type = 'P')
+BEGIN
+   DROP PROCEDURE FlightToArchive;
+END;
+GO
+
+GO
+CREATE PROCEDURE FlightToArchive(
+	@DepartureCityName nvarchar(255),
+	@ArrivalCityName nvarchar(255),
+	@AirplaneName nvarchar(255),
+	@FlightName nvarchar(255),
+	@TravelTime time,
+	@Price float,
+	@DepartureDate datetime
 ) AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION;
-		
 
+		declare @FlightId bigint,
+				@IdDepartureCity bigint, 
+				@IdArrivalCity bigint,
+				@IdAirplane bigint;
+
+		set @IdDepartureCity = (select id from cities where [name] = @DepartureCityName);
+		set @IdArrivalCity = (select id from cities where [name] = @ArrivalCityName);
+		set @IdAirplane = (select id from airplane where [model] = @AirplaneName);
+		
+		set @FlightId = (
+			select 
+				id
+			from flights fl
+			where 
+				fl.flight_name = @FlightName AND
+				fl.departure_city = @IdDepartureCity AND
+				fl.arrival_city = @IdArrivalCity AND
+				fl.departure_date = @DepartureDate AND
+				dbo.GetTotalMinutes(fl.travel_time) = dbo.GetTotalMinutes(@TravelTime) AND
+				fl.price = @Price AND
+				fl.airplane_id = @IdAirplane
+		);
+
+		INSERT INTO archive_flights([departure_city], [arrival_city], airplane_id, flight_name, travel_time,price,departure_date)
+		SELECT [departure_city], [arrival_city], airplane_id, flight_name, travel_time,price,departure_date
+		FROM flights
+		WHERE flights.id = @FlightId;
+		
+		delete flights
+		WHERE flights.id = @FlightId;
 
         COMMIT;
-		SELECT 1;
+		SELECT 1, @FlightId, @FlightName,@DepartureCityName,@ArrivalCityName,@DepartureDate,@TravelTime,@Price,@AirplaneName;
 	END TRY
     BEGIN CATCH
         ROLLBACK;
@@ -1134,3 +1187,9 @@ BEGIN
 END;
 GO
 
+
+/*
+select * from flights
+
+select * from archive_flights
+*/

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -16,10 +15,23 @@ namespace WpfApp1
             {
                 if (column.DataType.FullName == "System.DateTime")
                 {
-                    //(column as DataGridTextColumn).Binding.StringFormat = "dd/MM/yyyy";
+                    //(column as DataView).Binding.StringFormat = "dd/MM/yyyy";
+                    Console.WriteLine(column);
+                    //(column as ).
                     //Console.WriteLine(column.DataType.FullName);
                 }
             }
+
+            //foreach (DataColumn column in data.Columns)
+            //{
+            //    if (column.DataType.FullName == "System.DateTime")
+            //    {
+            //        (column as DataRow).
+            //    }
+            //}
+
+            //.Columns["colName"].DefaultCellStyle.Format = "dd/MM/yyyy";
+            //data.Columns["WaitTime"]
         }
 
         public static bool CheckStrings(Func<string, bool> func, params string[] arr)

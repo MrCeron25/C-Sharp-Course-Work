@@ -11,7 +11,7 @@ namespace WpfApp1
     {
         private List<string> GetUpdatedCountries()
         {
-            List<string> result = new List<string>(); 
+            List<string> result = new List<string>();
             string request = $"EXECUTE GetCountries;";
             SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
 
@@ -45,7 +45,7 @@ namespace WpfApp1
             UpdateCities();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (Manager.Instance.MainFrame.CanGoBack)
             {
@@ -86,33 +86,36 @@ namespace WpfApp1
 
         private void change_Click(object sender, RoutedEventArgs e)
         {
-            DataRowView rowView = dataGrid.SelectedItem as DataRowView;
-            string CityName = rowView.Row.ItemArray[1].ToString();
-            string CountyName = rowView.Row.ItemArray[0].ToString();
-            SubWindowCitiesChange window = new SubWindowCitiesChange();
-            window.ComboBox.ItemsSource = GetUpdatedCountries();
-            window.ComboBox.SelectedItem = CountyName;
-            window.textBox.Text = CityName;
-            if ((bool)window.ShowDialog() && (
-                CountyName != window.ComboBox.SelectedItem.ToString() ||
-                CityName != window.textBox.Text))
+            if (dataGrid.SelectedItem != null)
             {
-                string request = $"EXECUTE ChangeCities @CityName, @NewCityName, @CountryName, @NewCountryName;";
-                SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
-                command.Parameters.Add("@CityName", SqlDbType.NVarChar).Value = CityName;
-                command.Parameters.Add("@NewCityName", SqlDbType.NVarChar).Value = window.textBox.Text;
-                command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = CountyName;
-                command.Parameters.Add("@NewCountryName", SqlDbType.NVarChar).Value = window.ComboBox.SelectedItem.ToString();
-                DataTable data = SqlServer.Instance.Select(command);
-                if (data.Rows[0].ItemArray[0].ToString() == "1")
+                DataRowView rowView = dataGrid.SelectedItem as DataRowView;
+                string CityName = rowView.Row.ItemArray[1].ToString();
+                string CountyName = rowView.Row.ItemArray[0].ToString();
+                SubWindowCitiesChange window = new SubWindowCitiesChange();
+                window.ComboBox.ItemsSource = GetUpdatedCountries();
+                window.ComboBox.SelectedItem = CountyName;
+                window.textBox.Text = CityName;
+                if ((bool)window.ShowDialog() && (
+                    CountyName != window.ComboBox.SelectedItem.ToString() ||
+                    CityName != window.textBox.Text))
                 {
-                    //MessageBox.Show("Изменения сохранены.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    string request = $"EXECUTE ChangeCities @CityName, @NewCityName, @CountryName, @NewCountryName;";
+                    SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
+                    command.Parameters.Add("@CityName", SqlDbType.NVarChar).Value = CityName;
+                    command.Parameters.Add("@NewCityName", SqlDbType.NVarChar).Value = window.textBox.Text;
+                    command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = CountyName;
+                    command.Parameters.Add("@NewCountryName", SqlDbType.NVarChar).Value = window.ComboBox.SelectedItem.ToString();
+                    DataTable data = SqlServer.Instance.Select(command);
+                    if (data.Rows[0].ItemArray[0].ToString() == "1")
+                    {
+                        //MessageBox.Show("Изменения сохранены.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    UpdateCities();
                 }
-                else
-                {
-                    MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                UpdateCities();
             }
         }
     }

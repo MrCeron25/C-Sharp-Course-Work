@@ -10,7 +10,7 @@ namespace WpfApp1
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (Manager.Instance.MainFrame.CanGoBack)
             {
@@ -18,32 +18,32 @@ namespace WpfApp1
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Back_Click_1(object sender, RoutedEventArgs e)
         {
             Manager.Instance.MainFrame.Navigate(new PageCountries());
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void Back_Click_2(object sender, RoutedEventArgs e)
         {
             Manager.Instance.MainFrame.Navigate(new PageCities());
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void Back_Click_3(object sender, RoutedEventArgs e)
         {
             Manager.Instance.MainFrame.Navigate(new PageAirplanes());
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
+        private void Back_Click_4(object sender, RoutedEventArgs e)
         {
             Manager.Instance.MainFrame.Navigate(new PageFlights());
         }
 
-        private void Button_Click_5(object sender, RoutedEventArgs e)
+        private void Back_Click_5(object sender, RoutedEventArgs e)
         {
             Manager.Instance.MainFrame.Navigate(new PassengerList());
         }
 
-        private void Button_Click_6(object sender, RoutedEventArgs e)
+        private void Back_Click_6(object sender, RoutedEventArgs e)
         {
             Manager.Instance.MainFrame.Navigate(new SoldTickets());
         }

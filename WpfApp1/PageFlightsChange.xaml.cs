@@ -99,7 +99,7 @@ namespace WpfApp1
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (Manager.Instance.MainFrame.CanGoBack)
             {

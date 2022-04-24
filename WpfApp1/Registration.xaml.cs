@@ -30,7 +30,7 @@ namespace WpfApp1
             return res;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (Tools.CheckStrings(it => !string.IsNullOrEmpty(it),
                              name.Text,
@@ -90,7 +90,7 @@ namespace WpfApp1
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Back_Click_1(object sender, RoutedEventArgs e)
         {
             if (Manager.Instance.MainFrame.CanGoBack)
             {

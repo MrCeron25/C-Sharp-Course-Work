@@ -45,7 +45,7 @@ namespace WpfApp1
         /// <summary>
         /// Выборка данных (SELECT/PROC/FUNC)
         /// </summary>
-        /// <param name="sqlExpression">SqlCommand c запросом и подключением</param>
+        /// <param name="command">SqlCommand c запросом и подключением</param>
         /// <returns>DataTable с данными</returns>
         public DataTable Select(SqlCommand command)
         {
@@ -65,7 +65,7 @@ namespace WpfApp1
         /// <summary>
         /// Выполнить sql запрос (подходит для Update/Delete/Insert/PROC/FUNC) 
         /// </summary>
-        /// <param name="request">SqlCommand c запросом и подключением</param>
+        /// <param name="command">SqlCommand c запросом и подключением</param>
         /// <returns>Количество затронутых строк</returns>
         public int ExecuteRequest(SqlCommand command)
         {

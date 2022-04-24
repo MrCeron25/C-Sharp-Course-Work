@@ -30,7 +30,7 @@ namespace WpfApp1
             UpdateCountries();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (Manager.Instance.MainFrame.CanGoBack)
             {
@@ -48,35 +48,38 @@ namespace WpfApp1
 
         private void change_Click(object sender, RoutedEventArgs e)
         {
-            DataRowView rowview = dataGrid.SelectedItem as DataRowView;
-            string countyName = rowview.Row[0].ToString();
-
-            SubWindowCountryChange window = new SubWindowCountryChange();
-            window.label.Content = "Страна :";
-            window.textBox.Text = countyName;
-            window.Title = "Окно изменения";
-            window.action.Content = "Сохранить";
-            if ((bool)window.ShowDialog() && window.textBox.Text != countyName)
+            if (dataGrid.SelectedItem != null)
             {
-                string request = $"EXECUTE UpdateCountry @CountryName, @NewName;";
-                SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
-                command.Parameters.Add("@NewName", SqlDbType.NVarChar).Value = window.textBox.Text;
-                command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = countyName;
+                DataRowView rowview = dataGrid.SelectedItem as DataRowView;
+                string countyName = rowview.Row[0].ToString();
 
-                DataTable data = SqlServer.Instance.Select(command);
-                if (data.Rows.Count > 0 && data.Rows[0].ItemArray[0].ToString() == "1")
+                SubWindowCountryChange window = new SubWindowCountryChange();
+                window.label.Content = "Страна :";
+                window.textBox.Text = countyName;
+                window.Title = "Окно изменения";
+                window.action.Content = "Сохранить";
+                if ((bool)window.ShowDialog() && window.textBox.Text != countyName)
                 {
-                    //MessageBox.Show("Город успешно изменён.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    string request = $"EXECUTE UpdateCountry @CountryName, @NewName;";
+                    SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
+                    command.Parameters.Add("@NewName", SqlDbType.NVarChar).Value = window.textBox.Text;
+                    command.Parameters.Add("@CountryName", SqlDbType.NVarChar).Value = countyName;
+
+                    DataTable data = SqlServer.Instance.Select(command);
+                    if (data.Rows.Count > 0 && data.Rows[0].ItemArray[0].ToString() == "1")
+                    {
+                        //MessageBox.Show("Город успешно изменён.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    UpdateCountries();
                 }
-                else
-                {
-                    MessageBox.Show($"Ошибка запроса.\n{data.Rows[0].ItemArray[1]}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                UpdateCountries();
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Back_Click_1(object sender, RoutedEventArgs e)
         {
             SubWindowCountryAdd window = new SubWindowCountryAdd();
             window.label.Content = "Название страны :";

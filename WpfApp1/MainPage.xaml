@@ -9,9 +9,9 @@
       Title="MainPage">
 
     <Grid Background="White">
-        <Button Content="Вход в систему" HorizontalAlignment="Left" Margin="300,270,0,0" VerticalAlignment="Top" Width="200" Height="30" Click="Button_Click_2"/>
-        <Button Content="Регистрация" HorizontalAlignment="Left" Margin="565,380,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="Button_Click_1"/>
-        <Button Content="Выход" HorizontalAlignment="Left" Margin="684,380,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="Button_Click"/>
+        <Button Content="Вход в систему" HorizontalAlignment="Left" Margin="300,270,0,0" VerticalAlignment="Top" Width="200" Height="30" Click="Back_Click_2"/>
+        <Button Content="Регистрация" HorizontalAlignment="Left" Margin="565,380,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="Back_Click_1"/>
+        <Button Content="Выход" HorizontalAlignment="Left" Margin="684,380,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="Back_Click"/>
 
         <TextBox x:Name="login" 
                  HorizontalAlignment="Left" 

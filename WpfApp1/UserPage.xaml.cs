@@ -41,7 +41,7 @@ namespace WpfApp1
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (Manager.Instance.MainFrame.CanGoBack)
             {
@@ -56,7 +56,7 @@ namespace WpfApp1
             from.Text = buf;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Back_Click_1(object sender, RoutedEventArgs e)
         {
             if (Tools.CheckStrings(it => !string.IsNullOrEmpty(it),
                                    from.Text,
@@ -108,34 +108,37 @@ namespace WpfApp1
 
         private void Row_Click(object sender, MouseButtonEventArgs e)
         {
-            DataRowView rowview = dataGrid.SelectedItem as DataRowView;
-            flightId = uint.Parse(rowview.Row[0].ToString());
-
-            string request = $"select * from dbo.get_occupied_seats(@flightId);";
-            SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
-            command.Parameters.Add("@flightId", SqlDbType.BigInt).Value = flightId;
-
-            DataTable data = SqlServer.Instance.Select(command);
-
-            List<uint> occupiedPlaces = new List<uint>();
-            foreach (DataRow item in data.Rows)
+            if (dataGrid.SelectedItem != null)
             {
-                occupiedPlaces.Add(uint.Parse(item[0].ToString()));
+                DataRowView rowview = dataGrid.SelectedItem as DataRowView;
+                flightId = uint.Parse(rowview.Row[0].ToString());
+
+                string request = $"select * from dbo.get_occupied_seats(@flightId);";
+                SqlCommand command = SqlServer.Instance.CreateSqlCommand(request);
+                command.Parameters.Add("@flightId", SqlDbType.BigInt).Value = flightId;
+
+                DataTable data = SqlServer.Instance.Select(command);
+
+                List<uint> occupiedPlaces = new List<uint>();
+                foreach (DataRow item in data.Rows)
+                {
+                    occupiedPlaces.Add(uint.Parse(item[0].ToString()));
+                }
+
+                command.CommandText = $"select dbo.get_number_of_seats(@flightId);";
+                data = SqlServer.Instance.Select(command);
+
+
+                numberOfSeat = uint.Parse(data.Rows[0].ItemArray[0].ToString());
+                combobox.ItemsSource = GetFreeSeats(occupiedPlaces, numberOfSeat);
+                if (combobox.Items.Count > 0)
+                {
+                    combobox.IsEnabled = true;
+                }
+
+                buyTicket.IsEnabled = false;
+                combobox.SelectedItem = null;
             }
-
-            command.CommandText = $"select dbo.get_number_of_seats(@flightId);";
-            data = SqlServer.Instance.Select(command);
-            
-
-            numberOfSeat = uint.Parse(data.Rows[0].ItemArray[0].ToString());
-            combobox.ItemsSource = GetFreeSeats(occupiedPlaces, numberOfSeat);
-            if (combobox.Items.Count > 0)
-            {
-                combobox.IsEnabled = true;
-            }
-
-            buyTicket.IsEnabled = false;
-            combobox.SelectedItem = null;
         }
 
         private List<uint> GetFreeSeats(List<uint> occupiedPlaces, uint numberOfSeat)
@@ -172,7 +175,7 @@ namespace WpfApp1
             buyTicket.IsEnabled = false;
             combobox.IsEnabled = false;
             combobox.ItemsSource = null;
-            Button_Click_1(null, null); // обновление таблицы
+            Back_Click_1(null, null); // обновление таблицы
         }
 
         private void myTicket_Click(object sender, RoutedEventArgs e)

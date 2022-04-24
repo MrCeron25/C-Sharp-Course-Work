@@ -27,7 +27,7 @@ namespace WpfApp1
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             if (Manager.Instance.MainFrame.CanGoBack)
             {
@@ -70,7 +70,7 @@ namespace WpfApp1
                            NewTicket.ToString());
             }
         }
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Back_Click_1(object sender, RoutedEventArgs e)
         {
             Thread newThread = new Thread(SaveAllTickets);
             newThread.Start();
